@@ -83,6 +83,8 @@
             y = o.y;
 
         switch (o.position) {
+          case 'center':
+            break;
           case 'top-right':
             x += o.nodeSize * cos315;
             y += o.nodeSize * sin315;

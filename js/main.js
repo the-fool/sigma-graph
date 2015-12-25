@@ -25,11 +25,29 @@ for (i = 0; i < N; i++) {
   o = cs[(Math.random() * C) | 0];
   g.nodes.push({
     id: 'n' + i,
-    label: 'Node' + i,
+    //label: 'Node' + i,
     x: 100 * Math.cos(2 * i * Math.PI / N),
     y: 100 * Math.sin(2 * i * Math.PI / N),
-    size: .5,
-    color: o.color
+    color: o.color,
+    size: 10,
+    glyphs: [{
+          position: 'center',
+          size: 15,
+          // Style 1:
+          ///fillColor: '#fff',
+          //strokeColor: function() { return this.color; },
+          //strokeIfText: false,
+
+          // Style 2:
+           textColor: '#fff',
+           fillColor: o.color,
+           strokeColor: '#fff',
+           strokeIfText: true,
+
+          content: (i + 10) * 10 
+        }],
+    
+    
   });
   o.nodes.push('n' + i);
 }
@@ -45,22 +63,33 @@ for (i = 0; i < E; i++) {
       size: .5
     });
 }
-    
+
+sigma.renderers.def = sigma.renderers.canvas;
 s = new sigma({
   graph: g,
-  renderer: {
-    container: 'graph-container',
-    type: 'canvas'
-  },
   settings: {
     minEdgeSize: 3,
     maxEdgeSize: 3,
     minArrowSize: 4,
-    minNodeSize: 10,
-    maxNodeSize: 10
+    minNodeSize: 20,
+    maxNodeSize: 20,
+    glyphLineWidth: 1,
+    glyphStrokeIfText: false,
+    glyphTextThreshold: 1,
+    glyphThreshold: 1
   },
   container: 'graph-container'
 });
+
+
+var myRenderer = s.renderers[0];
+
+myRenderer.glyphs();
+
+myRenderer.bind('render', function(e) {
+    myRenderer.glyphs();
+});
+
 var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
   iterations: 500,
   easing: 'quadraticInOut',
