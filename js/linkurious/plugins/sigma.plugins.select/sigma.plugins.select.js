@@ -164,8 +164,8 @@
 
       a.addNodes(newTargets);
       s.refresh({skipIndexation: true});
-      console.log(callback);
-      callback();
+      if (callback !== undefined)
+        callback();
     };
 
     /**

@@ -152,10 +152,10 @@
 /* Default demo styles */
 .snap-content {
   background: #BFC7D8;
-  background: -webkit-radial-gradient( #bfb4d0,  #5c3d69, #171517); /* Safari */
-  background: -o-radial-gradient(#bfb4d0,  #5c3d69, #171517); /* Opera 11.6 to 12.0 */
-  background: -moz-radial-gradient(#bfb4d0,  #5c3d69, #171517); /* Firefox 3.6 to 15 */
-  background: radial-gradient(#bfb4d0,  #5c3d69, #171517); /* Standard syntax */
+  background: -webkit-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Safari */
+  background: -o-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Opera 11.6 to 12.0 */
+  background: -moz-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Firefox 3.6 to 15 */
+  background: radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Standard syntax */
 }
 
 .snap-drawers {
