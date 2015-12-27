@@ -94,11 +94,10 @@ s = new sigma({
 });
 
 var activeState = sigma.plugins.activeState(s);
-var select = sigma.plugins.select(s, activeState, s.renderers[0]);
+var select = sigma.plugins.select(s, activeState, s.renderers[0], snap_open);
 var myRenderer = s.renderers[0];
 
 myRenderer.bind('render', function(e) {
-    console.log(e);
     myRenderer.glyphs();
 });
 
@@ -131,13 +130,20 @@ dagreListener.bind('start stop interpolate', function(e) {
 // Start the DAG layout:
 sigma.layouts.dagre.start(s);
 
-s.bind('overNode outNode clickNode doubleClickNode rightClickNode', function(e) {
+function snap_open() {
+    snapper.open('left');
+    snapper.disable();
+     $('#close-left i').transition({ rotate: '0deg'});
+}
+/*
+s.bind('clickNode', function(e) {
    snapper.open('left');
    snapper.disable();
    $('#close-left i').transition({ rotate: '0deg'});
    //$('.menu').toggleClass('open', 200, 'easeOutQuad');
    console.log(e.type, e.data.node.label, e.data.captor);
-});
+});*/
+
 s.bind('overEdge outEdge clickEdge doubleClickEdge rightClickEdge', function(e) {
   console.log(e.type, e.data.edge, e.data.captor);
 });

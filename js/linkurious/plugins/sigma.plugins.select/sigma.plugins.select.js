@@ -80,13 +80,14 @@
    * @param  {?renderer}                 renderer The related renderer instance.
    *                                              Default value: s.renderers[0].
    */
-  function Select(s, a, r) {
+  function Select(s, a, r, cb) {
     var
       self = this,
       renderer = r || s.renderers[0],
       mousemoveCount = 0,
       kbd = null,
-      lasso = null;
+      lasso = null,
+      callback = cb;
 
     _body = _body || document.getElementsByTagName('body')[0];
 
@@ -163,6 +164,8 @@
 
       a.addNodes(newTargets);
       s.refresh({skipIndexation: true});
+      console.log(callback);
+      callback();
     };
 
     /**
@@ -407,10 +410,10 @@
    * @param  {?renderer}                 renderer The related renderer instance.
    *                                              Default value: s.renderers[0].
    */
-  sigma.plugins.select = function(s, a, renderer) {
+  sigma.plugins.select = function(s, a, renderer, cb) {
     // Create object if undefined
     if (!_instance[s.id]) {
-      _instance[s.id] = new Select(s, a);
+      _instance[s.id] = new Select(s, a, renderer, cb);
 
       s.bind('kill', function() {
         sigma.plugins.killSelect(s);
