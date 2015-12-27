@@ -63,11 +63,23 @@ for (i = 0; i < E; i++) {
       size: .5
     });
 }
-
 sigma.renderers.def = sigma.renderers.canvas;
 s = new sigma({
   graph: g,
+  renderer: {
+    container: document.getElementById('graph-container'),
+    type: 'canvas'
+  },
   settings: {
+    borderSize: 1,
+    outerBorderSize: 7,
+    defaultNodeBorderColor: 'rgba(255,215,0,.2)',
+    defaultNodeOuterBorderColor: 'rgb(236, 81, 72)',
+    edgeHoverExtremities: true,
+    enableHovering: true,
+    nodeHoverLevel: 3,
+    nodeHoverColor: 'default',
+    defaultNodeHoverColor: 'rgba(255,215,0,.2)',
     minEdgeSize: 3,
     maxEdgeSize: 3,
     minArrowSize: 4,
@@ -81,12 +93,12 @@ s = new sigma({
   container: 'graph-container'
 });
 
-
+var activeState = sigma.plugins.activeState(s);
+var select = sigma.plugins.select(s, activeState, s.renderers[0]);
 var myRenderer = s.renderers[0];
 
-myRenderer.glyphs();
-
 myRenderer.bind('render', function(e) {
+    console.log(e);
     myRenderer.glyphs();
 });
 

@@ -96,9 +96,10 @@
     }
 
     // Node:
-    var nodeRenderer = sigma.canvas.nodes[node.type] || sigma.canvas.nodes.def;
+    var nodeRenderer = sigma.canvas.nodes[node.type] || sigma.canvas.nodes.def;  
+    
     nodeRenderer(node, context, settings, { color: color });
-
+    
     // reset shadow
     if (level) {
       context.shadowOffsetY = 0;
