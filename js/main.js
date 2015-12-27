@@ -75,13 +75,13 @@ s = new sigma({
   settings: {
     borderSize: 1,
     outerBorderSize: 7,
-    defaultNodeBorderColor: 'rgba(255,215,0,.3)',
-    defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
+    defaultNodeBorderColor: 'rgba(255,215,0,.1)',
+    defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .5)',
     edgeHoverExtremities: true,
     enableHovering: true,
     nodeHoverLevel: 3,
     nodeHoverColor: 'default',
-    defaultNodeHoverColor: 'rgba(255,215,0,.1)',
+    defaultNodeHoverColor: 'rgba(255,215,0,.05)',
     minEdgeSize: 3,
     maxEdgeSize: 3,
     minArrowSize: 4,
@@ -95,13 +95,13 @@ s = new sigma({
   container: 'graph-container'
 });
 
-var activeState = sigma.plugins.activeState(s);
-var select = sigma.plugins.select(s, activeState, s.renderers[0], snap_open);
-var myRenderer = s.renderers[0];
-
-myRenderer.bind('render', function(e) {
-    myRenderer.glyphs();
+var glyphRenderer = s.renderers[0];
+glyphRenderer.bind('render', function(e) {
+    glyphRenderer.glyphs();
 });
+
+var activeState = sigma.plugins.activeState(s);
+var select = sigma.plugins.select(s, activeState, glyphRenderer, snap_open);
 
 
 var frListener = sigma.layouts.fruchtermanReingold.configure(s, {

@@ -12,17 +12,7 @@
 	left: auto;
 }
 
-/* Hide the actual "Right" drawer in the demo */
-.snapjs-right .snap-drawer-right {
-	display: none;
-}
 
-/* Show the "Drag" background in the demo */
-#content {
-	background: #BFC7D8 url(drag.png) center 75% no-repeat;
-}
-
-/* Demo toolbar styles */
 #toolbar {
   background: #536ea7;
   border-bottom: 1px solid #111b32;
@@ -48,38 +38,7 @@
   height: 44px;
 }
 
-#open-left {
-  background: url(open.png) center center no-repeat;
-  display: block;
-  width: 44px;
-  height: 44px;
-}
 
-/* Show the red "No Drag" box in the demo */
-#no-drag,
-#do-drag {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 50%;
-	height: 100px;
-	margin-left: -25%;
-	margin-top: -50px;
-	background: red;
-	color: #FFF;
-	text-align: center;
-	line-height: 100px;
-}
-#do-drag{
-	background: green;
-}
-
-/* Styles for the social buttons in the demo */
-.demo-social {
-	padding: 0 15px;
-}
-
-/* Show the translucent white "Toggle" boxes in the demo */
 .toggler {
 	width: 80%;
 	background: rgba(255,255,255,0.5);
@@ -149,7 +108,6 @@
 	color: rgba(0, 0, 0, 0.6);
 }
 
-/* Default demo styles */
 .snap-content {
   background: #BFC7D8;
   background: -webkit-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Safari */
@@ -180,7 +138,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 0;
 }
-
 .snap-drawer ul {
   padding: 0;
   margin: 0;
@@ -204,6 +161,7 @@
   padding: 15px;
   font-size: 12px;
 }
+
 #control-pane {
       top: 10px;
       /*bottom: 10px;*/
@@ -251,10 +209,3 @@ input[type=range] {
       width: 160px;
 }
 
-#grad {
-  background: red; /* For browsers that do not support gradients */
-  background: -webkit-radial-gradient(circle, red, yellow, green); /* Safari */
-  background: -o-radial-gradient(circle, red, yellow, green); /* Opera 11.6 to 12.0 */
-  background: -moz-radial-gradient(circle, red, yellow, green); /* Firefox 3.6 to 15 */
-  background: radial-gradient(circle, red, yellow, green); /* Standard syntax */
-}
