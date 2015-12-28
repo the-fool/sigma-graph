@@ -33,17 +33,10 @@ var g = {
         size: 50,
         glyphs: [{
               position: 'center',
-             // size: 15,
-              // Style 1:
-              ///fillColor: '#fff',
-              //strokeColor: function() { return this.color; },
-              //strokeIfText: false,
-              // Style 2:
                textColor: '#fff',
                fillColor: o.color,
                strokeColor: '#fff',
                strokeIfText: false,
-
               content: 'CS'+ (i + 10) * 10 
             }]  
       });
@@ -67,10 +60,7 @@ sigma.renderers.def = sigma.renderers.canvas;
 
 s = new sigma({
   graph: g,
-  renderer: {
-    container: document.getElementById('graph-container'),
-    type: 'canvas'
-  },
+  container: 'graph-container',
   settings: {
     borderSize: 1,
     outerBorderSize: 7,
@@ -93,7 +83,6 @@ s = new sigma({
     glyphTextThreshold: 1,
     glyphThreshold: 6
   },
-  container: 'graph-container'
 });
 
 var glyphRenderer = s.renderers[0];
@@ -102,8 +91,7 @@ glyphRenderer.bind('render', function(e) {
 });
 
 var activeState = sigma.plugins.activeState(s);
-var select = sigma.plugins.select(s, activeState, glyphRenderer, snap_open);
-
+var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, snapOpen);
 
 var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
   iterations: 500,
@@ -121,19 +109,17 @@ var dagreListener = sigma.layouts.dagre.configure(s, {
   boundingBox: {minX: 10, maxX: 15, minY: 5, maxY:10} // constrain layout bounds ; object or true (all current positions of the given nodes)
 });
 
-dagreListener.bind('start stop interpolate', function(e) {
-  console.log(e.type);
-});
-
 sigma.layouts.dagre.start(s);
 
-function snap_open() {
+
+function snapOpen() {
     if (snapper.state().state === 'closed'){ 
         snapper.open('left');
         snapper.disable();
     }
-    arrowSpin() 
+    arrowSpin(); 
 }
+
 function arrowSpin() {
     var i = $('#close-left i');
     if (i.hasClass('spun')) {
