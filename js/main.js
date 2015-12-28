@@ -91,7 +91,7 @@ glyphRenderer.bind('render', function(e) {
 });
 
 var activeState = sigma.plugins.activeState(s);
-var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, snapOpen);
+var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, snapOpen, {exclusive: true});
 
 var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
   iterations: 500,
