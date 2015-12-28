@@ -26,26 +26,25 @@ var g = {
       o = cs[(Math.random() * C) | 0];
       g.nodes.push({
         id: 'n' + i,
-        //label: 'Node' + i,
+        name: 'CS' + (i + 10) * 10,
         x: 100 * Math.cos(2 * i * Math.PI / N),
         y: 100 * Math.sin(2 * i * Math.PI / N),
         color: o.color,
-        size: 10,
+        size: 50,
         glyphs: [{
               position: 'center',
-              size: 15,
+             // size: 15,
               // Style 1:
               ///fillColor: '#fff',
               //strokeColor: function() { return this.color; },
               //strokeIfText: false,
-
               // Style 2:
                textColor: '#fff',
                fillColor: o.color,
                strokeColor: '#fff',
-               strokeIfText: true,
+               strokeIfText: false,
 
-              content: (i + 10) * 10 
+              content: 'CS'+ (i + 10) * 10 
             }]  
       });
       o.nodes.push('n' + i);
@@ -84,13 +83,15 @@ s = new sigma({
     defaultNodeHoverColor: 'rgba(255,215,0,.05)',
     minEdgeSize: 3,
     maxEdgeSize: 3,
-    minArrowSize: 4,
+    minArrowSize: 5,
     minNodeSize: 20,
     maxNodeSize: 20,
+    glyphScale: .9,
+    glyphFontScale: .6,  
     glyphLineWidth: 1,
-    glyphStrokeIfText: false,
+    glyphStrokeIfText: true,
     glyphTextThreshold: 1,
-    glyphThreshold: 1
+    glyphThreshold: 6
   },
   container: 'graph-container'
 });
@@ -127,32 +128,25 @@ dagreListener.bind('start stop interpolate', function(e) {
 sigma.layouts.dagre.start(s);
 
 function snap_open() {
-    var i = $('#close-left i');
     if (snapper.state().state === 'closed'){ 
         snapper.open('left');
         snapper.disable();
-        
-    } 
+    }
+    arrowSpin() 
+}
+function arrowSpin() {
+    var i = $('#close-left i');
     if (i.hasClass('spun')) {
-        i.transition({rotate: '1080deg'});
+        i.transition({rotate: '0deg'});
         i.removeClass('spun');
     } else {
-        i.transition({rotate: '0deg'});
+        i.transition({rotate: '1080deg'});
         i.addClass('spun');
     }
 }
 
-
 $('#close-left i').bind('click', function() {
-    console.log(this);
-    var i = $(this);
-    if (i.hasClass('spun')) {
-        i.transition({rotate: '1080deg'});
-        i.removeClass('spun');
-    } else {
-        i.transition({rotate: '0deg'});
-        i.addClass('spun');
-    }
+    arrowSpin();
     snapper.enable();
     setTimeout(function() {snapper.close('left');}, 300);
 });
@@ -164,5 +158,4 @@ $('#layout-style').bind('change', function() {
         sigma.layouts.fruchtermanReingold.start(s);
     else
         sigma.layouts.dagre.start(s);
-   
 });
