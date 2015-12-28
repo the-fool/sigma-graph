@@ -1,6 +1,7 @@
 var g = {
       nodes: [],
-      edges: []
+      edges: [],
+      drawerNode: null
     };
 
 (function(g) {
@@ -112,19 +113,23 @@ var dagreListener = sigma.layouts.dagre.configure(s, {
 sigma.layouts.dagre.start(s);
 
 
-function snapOpen() {
-    if (snapper.state().state === 'closed'){ 
+function snapOpen(target) {
+    console.log(target);
+    if (target.length === 0 && g.drawerNode !== null)
+        snapClose();
+    else if (snapper.state().state === 'closed'){
+        g.drawerNode = target;
         snapper.open('left');
         snapper.disable();
     }
     $('#drawer-title').text()
-    arrowSpin();
-    console.log(activeState.nodes());    
+    arrowSpin();    
 }
 
 function snapClose() {
     arrowSpin();
     snapper.enable();
+    g.drawerNode = null;
     setTimeout(function() {snapper.close('left');}, 300);
 }
 
