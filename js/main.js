@@ -117,7 +117,15 @@ function snapOpen() {
         snapper.open('left');
         snapper.disable();
     }
-    arrowSpin(); 
+    $('#drawer-title').text()
+    arrowSpin();
+    console.log(activeState.nodes());    
+}
+
+function snapClose() {
+    arrowSpin();
+    snapper.enable();
+    setTimeout(function() {snapper.close('left');}, 300);
 }
 
 function arrowSpin() {
@@ -132,9 +140,10 @@ function arrowSpin() {
 }
 
 $('#close-left i').bind('click', function() {
-    arrowSpin();
-    snapper.enable();
-    setTimeout(function() {snapper.close('left');}, 300);
+    activeState.dropNodes();
+    console.log(activeState.nodes());
+    s.refresh({skipIndexation: true});
+    snapClose();
 });
 
 $('#layout-style').bind('change', function() {
