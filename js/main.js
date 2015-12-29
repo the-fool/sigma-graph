@@ -114,7 +114,7 @@ sigma.layouts.dagre.start(s);
 
 function selectCallback(target) {
     if (target.length === 0 && g.drawerNode !== null)
-        snapClose();
+        leftSnapClose();
     else {
         setDrawerContent(s.graph.nodes(target)[0]);
         if (snapper.state().state === 'closed'){
@@ -123,7 +123,7 @@ function selectCallback(target) {
             snapper.disable();
         }
     }
-    arrowSpin();    
+    arrowSpin('left');    
 }
 
 function setDrawerContent(node) {
@@ -132,8 +132,8 @@ function setDrawerContent(node) {
     }).fadeIn();
 }
 
-function snapClose() {
-    arrowSpin();
+function leftSnapClose() {
+    arrowSpin('left');
     snapper.enable();
     g.drawerNode = null;
     setTimeout(function() {
@@ -142,8 +142,16 @@ function snapClose() {
     $('#drawer-title').fadeOut();
 }
 
-function arrowSpin() {
-    var i = $('#close-left i');
+function rightSnapClose() {
+    arrowSpin('right');
+    snapper.enable();
+    setTimeout(function() {
+        snapper.close('right');
+    }, 300);
+}
+
+function arrowSpin(leftOrRight) {
+    var i = leftOrRight === 'left' ? $('#close-left i') : $('#close-right i');
     if (i.hasClass('spun')) {
         i.transition({rotate: '0deg'});
         i.removeClass('spun');
@@ -155,16 +163,30 @@ function arrowSpin() {
 
 $('#close-left i').bind('click', function() {
     activeState.dropNodes();
-    console.log(activeState.nodes());
+  // console.log(activeState.nodes());
     s.refresh({skipIndexation: true});
-    snapClose();
+    leftSnapClose();
 });
 
+$('#close-right i').bind('click', function() {
+    activeState.dropNodes();
+   // console.log(activeState.nodes());
+    s.refresh({skipIndexation: true});
+    rightSnapClose();
+});
+
+
 $('#wrench').bind('click', function() {
-    snapper.enable();
-    snapper.open('right');
-    snapper.disable();
-})
+    if (snapper.state().state === 'right') {
+        rightSnapClose();
+        snapper.enable();
+    }
+    else {
+        snapper.open('right');
+        arrowSpin('right');    
+        snapper.disable();
+    }
+});
 
 $('#layout-style').bind('change', function() {
     var style = this.value;
