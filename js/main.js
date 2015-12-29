@@ -140,9 +140,9 @@ function selectCallback(target) {
 }
 
 function setDrawerContent(node) {
-    $('#drawer-title').fadeOut(function() {
+    $('#drawer-title').fadeOut(200, function() {
         $(this).text(node.name)
-    }).fadeIn();
+    }).fadeIn(200);
 }
 
 function leftSnapClose() {
@@ -152,7 +152,9 @@ function leftSnapClose() {
     setTimeout(function() {
         snapper.close('left');
     }, 300);
-    $('#drawer-title').fadeOut();
+    activeState.dropNodes();
+    s.refresh({skipIndexation: true});
+    $('#drawer-title').fadeOut();  
 }
 
 function rightSnapClose() {
@@ -161,6 +163,8 @@ function rightSnapClose() {
     setTimeout(function() {
         snapper.close('right');
     }, 300);
+    activeState.dropNodes();
+    s.refresh({skipIndexation: true});
 }
 
 function arrowSpin(leftOrRight) {
@@ -175,16 +179,10 @@ function arrowSpin(leftOrRight) {
 }
 
 $('#close-left i').bind('click', function() {
-    activeState.dropNodes();
-  // console.log(activeState.nodes());
-    s.refresh({skipIndexation: true});
     leftSnapClose();
 });
 
 $('#close-right i').bind('click', function() {
-    activeState.dropNodes();
-   // console.log(activeState.nodes());
-    s.refresh({skipIndexation: true});
     rightSnapClose();
 });
 
