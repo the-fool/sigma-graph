@@ -2,7 +2,9 @@ var g = {
       nodes: [],
       edges: [],
       drawerNode: null
-    };
+    },
+    layoutEnum = Object.freeze({Fruchterman: 0, Dagre: 1}),
+    layoutStyle = layoutEnum.Dagre;
 
 (function(g) {
     var i,
@@ -110,7 +112,18 @@ var dagreListener = sigma.layouts.dagre.configure(s, {
   boundingBox: {minX: 10, maxX: 15, minY: 5, maxY:10} // constrain layout bounds ; object or true (all current positions of the given nodes)
 });
 
-sigma.layouts.dagre.start(s);
+function startLayout() {
+    switch (layoutStyle) {
+        case layoutEnum.Dagre:
+            sigma.layouts.dagre.start(s);
+            break;
+        case layoutEnum.Fruchterman:
+            sigma.layouts.fruchtermanReingold.start(s);
+            break;
+        default:
+            console.log("something went wrong with the layout switch");
+    }
+}
 
 function selectCallback(target) {
     if (target.length === 0 && g.drawerNode !== null)
@@ -188,11 +201,21 @@ $('#wrench').bind('click', function() {
     }
 });
 
-$('#layout-style').bind('change', function() {
-    var style = this.value;
-    console.log(style);
-    if (style === 'Reingold') 
-        sigma.layouts.fruchtermanReingold.start(s);
-    else
-        sigma.layouts.dagre.start(s);
+
+$('#eye').bind('click', function() {
+    switch (layoutStyle) {
+        case layoutEnum.Dagre:
+            layoutStyle = layoutEnum.Fruchterman;
+            break;
+        case layoutEnum.Fruchterman:
+            layoutStyle = layoutEnum.Dagre;
+            break;
+        default:
+            console.log("something went wrong with the eye");
+    }
+    startLayout();
+});
+
+$(function() {
+    startLayout();
 });

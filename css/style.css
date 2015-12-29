@@ -16,7 +16,7 @@
 #toolbar {
   text-align: right;
   position: absolute;
-  bottom: 0;
+  bottom: 1px;
   right: 0;
   left: 0;
   width: auto;
@@ -24,6 +24,7 @@
 
 #toolbar span {
     display: inline-block;
+    padding-right: 1em;
 }
 
 #toolbar h1 {
@@ -40,6 +41,13 @@
   height: 44px;
 }
 
+#toolbar i:hover {
+    color:darksalmon;
+}
+
+#toolbar i:active {
+    color:red;
+}
 
 .toggler {
 	width: 80%;
@@ -195,12 +203,6 @@
 #edit-toggle {
     
     margin-right: 20px;
-}
-#wrench:hover {
-    color:darksalmon;
-}
-#wrench:active {
-    color:red;
 }
 
 .line {
