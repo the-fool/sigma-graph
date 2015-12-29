@@ -188,49 +188,57 @@ function arrowSpin(leftOrRight) {
     }
 }
 
-/*
-** All event bindings
-**
-*/
-(function() {
-
-    $('#close-left i').bind('click', function() {
-        leftSnapClose();
-    });
-
-    $('#close-right i').bind('click', function() {
-        rightSnapClose();
-    });
-
-    $('#wrench').bind('click', function() {
-        if (snapper.state().state === 'right') {
-            rightSnapClose();
-            snapper.enable();
-        }
-        else {
-            $('#toolbar').detach().appendTo($('#container'));
-            snapper.open('right');
-            arrowSpin('right');    
-            snapper.disable();
-        }
-    });
-
-    $('#eye').bind('click', function() {
-        switch (layoutStyle) {
-            case layoutEnum.Dagre:
-                layoutStyle = layoutEnum.Fruchterman;
-                break;
-            case layoutEnum.Fruchterman:
-                layoutStyle = layoutEnum.Dagre;
-                break;
-            default:
-                console.log("something went wrong with the eye");
-        }
-        startLayout();
-    });
-})();
+function createNode() {
+    console.log("noding");
+}
 
 
 $(function() {
+    /*
+** All event bindings
+**
+*/
+    (function () {
+
+        $('#close-left i').bind('click', function() {
+            leftSnapClose();
+        });
+
+        $('#close-right i').bind('click', function() {
+            rightSnapClose();
+        });
+
+        $('#wrench').bind('click', function() {
+            if (snapper.state().state === 'right') {
+                rightSnapClose();
+                snapper.enable();
+            }
+            else {
+                $('#toolbar').detach().appendTo($('#container'));
+                snapper.open('right');
+                arrowSpin('right');    
+                snapper.disable();
+            }
+        });
+
+        $('#eye').bind('click', function() {
+            switch (layoutStyle) {
+                case layoutEnum.Dagre:
+                    layoutStyle = layoutEnum.Fruchterman;
+                    break;
+                case layoutEnum.Fruchterman:
+                    layoutStyle = layoutEnum.Dagre;
+                    break;
+                default:
+                    console.log("something went wrong with the eye");
+            }
+            startLayout();
+        });
+
+        $('#create-node').bind('click', function() {
+           createNode(); 
+        });
+    })();
+    
     startLayout();
 });
