@@ -132,8 +132,15 @@
 }
 .snap-drawer h3 i {
     color: chartreuse;
-    float: right;
     padding-right: 5px;
+}
+
+.snap-drawer-right h3 i {
+    float: left;
+}
+
+.snap-drawer-left h3 i {
+    float: right;
 }
 .snap-drawer h4 {
   padding: 15px;
@@ -156,6 +163,10 @@
   text-decoration: none;
   color: #ccc;
   text-indent: 20px;
+}
+
+.snap-drawer li:hover {
+    background: #323333;
 }
 
 .snap-drawer p {

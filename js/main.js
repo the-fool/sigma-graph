@@ -92,7 +92,7 @@ glyphRenderer.bind('render', function(e) {
 });
 
 var activeState = sigma.plugins.activeState(s);
-var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, snapOpen, {exclusive: true});
+var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, selectCallback, {exclusive: true});
 
 var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
   iterations: 500,
@@ -112,8 +112,7 @@ var dagreListener = sigma.layouts.dagre.configure(s, {
 
 sigma.layouts.dagre.start(s);
 
-function snapOpen(target) {
-    console.log(s.graph.nodes(target));
+function selectCallback(target) {
     if (target.length === 0 && g.drawerNode !== null)
         snapClose();
     else {
@@ -128,7 +127,6 @@ function snapOpen(target) {
 }
 
 function setDrawerContent(node) {
-   
     $('#drawer-title').fadeOut(function() {
         $(this).text(node.name)
     }).fadeIn();
@@ -161,6 +159,12 @@ $('#close-left i').bind('click', function() {
     s.refresh({skipIndexation: true});
     snapClose();
 });
+
+$('#wrench').bind('click', function() {
+    snapper.enable();
+    snapper.open('right');
+    snapper.disable();
+})
 
 $('#layout-style').bind('change', function() {
     var style = this.value;
