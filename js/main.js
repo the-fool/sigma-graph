@@ -129,15 +129,21 @@ function selectCallback(target) {
     if (target.length === 0 && g.drawerNode !== null)
         leftSnapClose();
     else {
-        setDrawerContent(s.graph.nodes(target)[0]);
+        g.drawerNode = target;
+        setDrawerContent(s.graph.nodes(g.drawerNode)[0]);
         if (snapper.state().state === 'closed'){
-            $('#toolbar').detach().appendTo($('#outside-container'));
-            g.drawerNode = target;
-            snapper.open('left');
-            snapper.disable();
+           leftSnapOpen();
+        } else {
+            arrowSpin('left');
         }
     }
-    arrowSpin('left');    
+}
+
+function leftSnapOpen() {
+    $('#toolbar').detach().appendTo($('#outside-container'));
+    snapper.open('left');
+    snapper.disable();
+    arrowSpin('left');  
 }
 
 function setDrawerContent(node) {
@@ -166,7 +172,7 @@ function rightSnapClose() {
         $('#toolbar').detach().appendTo($('#container'));
         snapper.close('right');
     }, 300);
-   
+    $('#toolbar').detach().appendTo($('#outside-container'));
     activeState.dropNodes();
     s.refresh({skipIndexation: true});
 }
@@ -182,42 +188,48 @@ function arrowSpin(leftOrRight) {
     }
 }
 
-$('#close-left i').bind('click', function() {
-    leftSnapClose();
-});
+/*
+** All event bindings
+**
+*/
+(function() {
 
-$('#close-right i').bind('click', function() {
-    rightSnapClose();
-});
+    $('#close-left i').bind('click', function() {
+        leftSnapClose();
+    });
 
-
-$('#wrench').bind('click', function() {
-    if (snapper.state().state === 'right') {
+    $('#close-right i').bind('click', function() {
         rightSnapClose();
-        snapper.enable();
-    }
-    else {
-        $('#toolbar').detach().appendTo($('#container'));
-        snapper.open('right');
-        arrowSpin('right');    
-        snapper.disable();
-    }
-});
+    });
 
+    $('#wrench').bind('click', function() {
+        if (snapper.state().state === 'right') {
+            rightSnapClose();
+            snapper.enable();
+        }
+        else {
+            $('#toolbar').detach().appendTo($('#container'));
+            snapper.open('right');
+            arrowSpin('right');    
+            snapper.disable();
+        }
+    });
 
-$('#eye').bind('click', function() {
-    switch (layoutStyle) {
-        case layoutEnum.Dagre:
-            layoutStyle = layoutEnum.Fruchterman;
-            break;
-        case layoutEnum.Fruchterman:
-            layoutStyle = layoutEnum.Dagre;
-            break;
-        default:
-            console.log("something went wrong with the eye");
-    }
-    startLayout();
-});
+    $('#eye').bind('click', function() {
+        switch (layoutStyle) {
+            case layoutEnum.Dagre:
+                layoutStyle = layoutEnum.Fruchterman;
+                break;
+            case layoutEnum.Fruchterman:
+                layoutStyle = layoutEnum.Dagre;
+                break;
+            default:
+                console.log("something went wrong with the eye");
+        }
+        startLayout();
+    });
+})();
+
 
 $(function() {
     startLayout();

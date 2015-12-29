@@ -179,6 +179,9 @@
 .snap-drawer li:hover {
     background: #323333;
 }
+.snap-drawer li:active {
+    background: #322222;
+}
 
 .snap-drawer p {
   opacity: 0.5;
