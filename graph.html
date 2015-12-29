@@ -9,9 +9,12 @@
         <div class="snap-drawers">
             <div class="snap-drawer snap-drawer-left">
                 <div>
-                    <h3 id="drawer-title">Drawer Title 
+                  
+                    <h3><span id="drawer-title">Drawer Title  </span>
+                        
                         <a id="close-left" href="#"><i class="fa fa-arrow-left"></i></a>
                     </h3>
+                   
                     <h4>Kategorien</h4>
                     <ul>
                         <li><a>Info</a></li>
@@ -25,14 +28,15 @@
             <div id="graph-container"></div>    
              <div id="control-pane">
                 <div>
-                    <h2 class="underline">Controls</h2>
-                    <br>
-                    <h3>Layout Style</h3>
+                    <h2 class="underline">Layout Style</h3>
                     <select id="layout-style">
                         <option selected>Dagre</option>
                         <option>Reingold</option>
                     </select>
                 </div>
+            </div>
+            <div id="edit-toggle">
+                <h2><a id="wrench" href='#'><i class="fa fa-wrench"></i></a></h2>
             </div>
         </div>
          
@@ -108,9 +112,9 @@
         <script src="js/lib/linkurious/plugins/sigma.layouts.fruchtermanReingold/sigma.layout.fruchtermanReingold.js"></script>
         <script src="js/lib/linkurious/plugins/sigma.layouts.dagre/sigma.layout.dagre.js"></script>
         
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-        <script src="http://ricostacruz.com/jquery.transit/jquery.transit.min.js"></script>
+        <script src="js/lib/jquery.js"></script>
+        <script src="js/lib/jquery.ui.js"></script>
+        <script src="js/lib/jquery.transit.min.js"></script>
         
         <script src="js/lib/Snap.js-develop/snap.js"></script>
         <script type="text/javascript">

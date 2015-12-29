@@ -59,7 +59,7 @@ var g = {
 
 sigma.renderers.def = sigma.renderers.canvas;
 
-s = new sigma({
+var s = new sigma({
   graph: g,
   container: 'graph-container',
   settings: {
@@ -112,25 +112,36 @@ var dagreListener = sigma.layouts.dagre.configure(s, {
 
 sigma.layouts.dagre.start(s);
 
-
 function snapOpen(target) {
-    console.log(target);
+    console.log(s.graph.nodes(target));
     if (target.length === 0 && g.drawerNode !== null)
         snapClose();
-    else if (snapper.state().state === 'closed'){
-        g.drawerNode = target;
-        snapper.open('left');
-        snapper.disable();
+    else {
+        setDrawerContent(s.graph.nodes(target)[0]);
+        if (snapper.state().state === 'closed'){
+            g.drawerNode = target;
+            snapper.open('left');
+            snapper.disable();
+        }
     }
-    $('#drawer-title').text()
     arrowSpin();    
+}
+
+function setDrawerContent(node) {
+   
+    $('#drawer-title').fadeOut(function() {
+        $(this).text(node.name)
+    }).fadeIn();
 }
 
 function snapClose() {
     arrowSpin();
     snapper.enable();
     g.drawerNode = null;
-    setTimeout(function() {snapper.close('left');}, 300);
+    setTimeout(function() {
+        snapper.close('left');
+    }, 300);
+    $('#drawer-title').fadeOut();
 }
 
 function arrowSpin() {

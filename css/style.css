@@ -132,6 +132,8 @@
 }
 .snap-drawer h3 i {
     color: chartreuse;
+    float: right;
+    padding-right: 5px;
 }
 .snap-drawer h4 {
   padding: 15px;
@@ -175,6 +177,18 @@
 #control-pane > div {
       margin: 10px;
       overflow-x: auto;
+}
+
+#edit-toggle {
+    position: absolute;
+    bottom: 8px;
+    right: 20px;
+}
+#wrench:hover {
+    color:darksalmon;
+}
+#wrench:active {
+    color:red;
 }
 
 .line {
