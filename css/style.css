@@ -14,14 +14,16 @@
 
 
 #toolbar {
-  background: #536ea7;
-  border-bottom: 1px solid #111b32;
+  text-align: right;
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
   left: 0;
   width: auto;
-  height: 44px;
+}
+
+#toolbar span {
+    display: inline-block;
 }
 
 #toolbar h1 {
@@ -191,9 +193,8 @@
 }
 
 #edit-toggle {
-    position: absolute;
-    bottom: 8px;
-    right: 20px;
+    
+    margin-right: 20px;
 }
 #wrench:hover {
     color:darksalmon;
