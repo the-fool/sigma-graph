@@ -131,6 +131,7 @@ function selectCallback(target) {
     else {
         setDrawerContent(s.graph.nodes(target)[0]);
         if (snapper.state().state === 'closed'){
+            $('#toolbar').detach().appendTo($('#outside-container'));
             g.drawerNode = target;
             snapper.open('left');
             snapper.disable();
@@ -151,6 +152,7 @@ function leftSnapClose() {
     g.drawerNode = null;
     setTimeout(function() {
         snapper.close('left');
+        $('#toolbar').detach().appendTo($('#outside-container'));
     }, 300);
     activeState.dropNodes();
     s.refresh({skipIndexation: true});
@@ -161,8 +163,10 @@ function rightSnapClose() {
     arrowSpin('right');
     snapper.enable();
     setTimeout(function() {
+        $('#toolbar').detach().appendTo($('#container'));
         snapper.close('right');
     }, 300);
+   
     activeState.dropNodes();
     s.refresh({skipIndexation: true});
 }
@@ -193,6 +197,7 @@ $('#wrench').bind('click', function() {
         snapper.enable();
     }
     else {
+        $('#toolbar').detach().appendTo($('#container'));
         snapper.open('right');
         arrowSpin('right');    
         snapper.disable();
