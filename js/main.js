@@ -28,12 +28,14 @@ var Node = (function () {
         return i;
     };
 
-    function Node() {
+    function Node(x, y) {
         var clr = cs[(Math.random() * C) | 0].color;
         this.color = clr,
             this.id = 'n' + id++,
             this.name = 'CS' + (id + 10) * 10,
             this.size = 1, // to be set by sigma global settings
+            this.x = typeof x !== 'undefined' ? x : 10,
+            this.y = typeof y !== 'undefined' ? y : 10,
             this.glyphs = [{
                 position: 'center',
                 textColor: '#fff',
@@ -55,9 +57,9 @@ var Node = (function () {
 
 
     for (i = 0; i < N; i++) {
-        n = new Node();
-        n.x = 100 * Math.cos(2 * i * Math.PI / N);
-        n.y = 100 * Math.sin(2 * i * Math.PI / N);
+        var x = 100 * Math.cos(2 * i * Math.PI / N),
+            y = 100 * Math.sin(2 * i * Math.PI / N);
+        n = new Node(x, y);
 
         g.nodes.push(n);
     }
@@ -164,6 +166,14 @@ function selectCallback(target) {
     arrowSpin('left');
 }
 
+function createNode() {
+    console.log("noding");
+    var n = new Node();
+    s.graph.addNode(n);
+    s.refresh();
+    startLayout();
+}
+
 function setDrawerContent(node) {
     $('#drawer-title').fadeOut(200, function () {
         $(this).text(node.name)
@@ -214,17 +224,12 @@ function arrowSpin(leftOrRight) {
     }
 }
 
-function createNode() {
-    console.log("noding");
-    s.graph.addNode()
-}
-
-
-(function() {
-    /*
+  /*
      ** All event bindings
      **
      */
+(function () {
+  
     $('#close-left i').bind('click', function () {
         leftSnapClose();
     });
