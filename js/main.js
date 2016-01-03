@@ -1,10 +1,29 @@
+"use strict";
 var g = {
+      id: 0,
       nodes: [],
       edges: [],
       drawerNode: null
     },
     layoutEnum = Object.freeze({Fruchterman: 0, Dagre: 1}),
     layoutStyle = layoutEnum.Dagre;
+
+
+/*var NodeClass = (function closure(){
+
+    var static_id = 0; //static private (scoped) variable
+
+    function NodeClass() {
+        var id = 'n' + ++static_id,
+            name = 'CS' + (id + 10) * 10; 
+        
+        this.getId = function() { 
+            return id; 
+        };
+    }
+    return NodeClass;
+})();*/
+
 
 (function(g) {
     var i,
@@ -18,8 +37,6 @@ var g = {
     
     for (i = 0; i < C; i++)
       cs.push({
-        id: i,
-        nodes: [],
         color: '#' + (
           Math.floor(Math.random() * 16777215).toString(16) + '000000'
         ).substr(0, 6)
@@ -33,7 +50,6 @@ var g = {
         x: 100 * Math.cos(2 * i * Math.PI / N),
         y: 100 * Math.sin(2 * i * Math.PI / N),
         color: o.color,
-        size: 50,
         glyphs: [{
               position: 'center',
                textColor: '#fff',
@@ -43,7 +59,6 @@ var g = {
               content: 'CS'+ (i + 10) * 10 
             }]  
       });
-      o.nodes.push('n' + i);
     }
 
     for (i = 0; i < E; i++) {
@@ -168,11 +183,10 @@ function leftSnapClose() {
 function rightSnapClose() {
     arrowSpin('right');
     snapper.enable();
+    $('#toolbar').detach().appendTo($('#container'));
     setTimeout(function() {
-        $('#toolbar').detach().appendTo($('#container'));
         snapper.close('right');
     }, 300);
-    $('#toolbar').detach().appendTo($('#outside-container'));
     activeState.dropNodes();
     s.refresh({skipIndexation: true});
 }
@@ -189,6 +203,7 @@ function arrowSpin(leftOrRight) {
 }
 
 function createNode() {
+    
     console.log("noding");
 }
 
@@ -238,7 +253,6 @@ $(function() {
         $('#create-node').bind('click', function() {
            createNode(); 
         });
-    })();
-    
+    })(); 
     startLayout();
 });
