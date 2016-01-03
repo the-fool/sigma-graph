@@ -138,10 +138,11 @@
       }
       a.dropEdges();
 
-      if (_spacebar) {
+      if (_spacebar || s.secondaryMode) {
         var existingTargets = difference(targets, newTargets);
         a.dropNodes(existingTargets);
       }
+                 
       else {
         if (actives.length > 1) {
           a.addNodes(targets);
@@ -171,8 +172,7 @@
         } else {
           call_it(newTargets);
         }
-      }
-     
+      }    
       a.addNodes(newTargets);
       s.refresh({skipIndexation: true});
      

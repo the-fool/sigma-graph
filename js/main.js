@@ -48,8 +48,8 @@ var Node = (function () {
 })();
 
 /*
-*  Populate dummy data
-*/
+ *  Populate dummy data
+ */
 (function (g) {
     var i,
         s,
@@ -86,6 +86,7 @@ var s = new sigma({
     graph: g,
     container: 'graph-container',
     settings: {
+        secondarySelectColor: '#fff',
         borderSize: 1,
         outerBorderSize: 7,
         defaultNodeBorderColor: 'rgba(255,215,0,.1)',
@@ -115,6 +116,7 @@ glyphRenderer.bind('render', function (e) {
 });
 
 var activeState = sigma.plugins.activeState(s);
+var secondaryActiveState = sigma.plugins.activeState(s);
 var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, selectCallback, {
     exclusive: true
 });
@@ -157,8 +159,7 @@ function startLayout() {
 function selectCallback(target) {
     if (target.length === 0 && g.drawerNode !== null) {
         leftSnapClose();
-    }
-    else {
+    } else {
         setDrawerContent(s.graph.nodes(target)[0]);
         if (snapper.state().state === 'closed') {
             $('#toolbar').detach().appendTo($('#outside-container'));
@@ -233,12 +234,12 @@ function arrowSpin(leftOrRight) {
     }
 }
 
-  /*
-     ** All event bindings
-     **
-     */
+/*
+ ** All event bindings
+ **
+ */
 (function () {
-  
+
     $('#close-left i').bind('click', function () {
         leftSnapClose();
     });
@@ -278,6 +279,12 @@ function arrowSpin(leftOrRight) {
     $('#create-node').bind('click', function () {
         createNode();
     });
+    $('#edit-dependencies').bind('click', function() {
+       
+var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, selectCallback, {
+    exclusive: true
+});
+    })
 })();
 
 

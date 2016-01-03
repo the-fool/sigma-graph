@@ -51,6 +51,7 @@
 
       // Outer Border:
       if (outerBorderSize > 0) {
+        if (node.secondaryActive) {console.log("secondary");}
         context.beginPath();
         context.fillStyle = settings('nodeOuterBorderColor') === 'node' ?
           (color || defaultNodeColor) :
