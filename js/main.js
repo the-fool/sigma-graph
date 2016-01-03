@@ -109,6 +109,7 @@ var s = new sigma({
         glyphThreshold: 6
     },
 });
+s.secondaryMode = false;
 
 var glyphRenderer = s.renderers[0];
 glyphRenderer.bind('render', function (e) {
@@ -280,11 +281,10 @@ function arrowSpin(leftOrRight) {
         createNode();
     });
     $('#edit-dependencies').bind('click', function() {
-       
-var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, selectCallback, {
-    exclusive: true
-});
-    })
+      console.log(s);    
+      s.secondaryMode = !s.secondaryMode;
+    });
+  
 })();
 
 

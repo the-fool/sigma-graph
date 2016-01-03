@@ -190,8 +190,11 @@
     if (!arguments.length) {
       _g.nodes().forEach(function(o) {
         if (!o.hidden) {
-          o.active = true;
-          _activeNodesIndex[o.id] = o;
+          n.active = true;
+          _activeNodesIndex[v] = n;
+          if (s.secondaryMode) {
+            n.secondaryActive = true;
+          }
         }
       });
     }
@@ -204,12 +207,11 @@
     else if (typeof v === 'string' || typeof v === 'number') {
       n = _g.nodes(v);
       if (!n.hidden) {
+        n.active = true;
+        _activeNodesIndex[v] = n;
         if (s.secondaryMode) {
             n.secondaryActive = true;
-        } else {
-        n.active = true;
         }
-        _activeNodesIndex[v] = n;
       }
     }
 
@@ -223,12 +225,11 @@
         if (typeof v[i] === 'string' || typeof v[i] === 'number') {
           n = _g.nodes(v[i]);
           if (!n.hidden) {
-            if (s.secondaryMode) {
-                n.secondaryActive = true;
-            } else {
-                n.active = true;
-            }
-            _activeNodesIndex[v[i]] = n;
+             n.active = true;
+        _activeNodesIndex[v] = n;
+        if (s.secondaryMode) {
+            n.secondaryActive = true;
+        }
           }
         }
         else
