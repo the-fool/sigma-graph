@@ -155,8 +155,9 @@ function startLayout() {
 
 
 function selectCallback(target) {
-    if (target.length === 0 && g.drawerNode !== null)
+    if (target.length === 0 && g.drawerNode !== null) {
         leftSnapClose();
+    }
     else {
         setDrawerContent(s.graph.nodes(target)[0]);
         if (snapper.state().state === 'closed') {
@@ -175,13 +176,15 @@ function createNode() {
     s.graph.addNode(n);
     activeState.dropNodes();
     activeState.addNodes(n.id);
+    setDrawerContent(n);
     s.refresh();
     startLayout();
 }
 
 function setDrawerContent(node) {
-    $('#drawer-title').fadeOut(200, function () {
-        $(this).text(node.name)
+    var txt = typeof node !== 'undefined' ? node.name : '';
+    $('.drawer-titles').fadeOut(200, function () {
+        $(this).text(txt)
     }).fadeIn(200);
 }
 
@@ -203,6 +206,7 @@ function leftSnapClose() {
 function rightSnapClose() {
     arrowSpin('right');
     snapper.enable();
+    $('.drawer-titles').fadeOut(200);
     setTimeout(function () {
         $('#toolbar').detach().appendTo($('#container'));
         snapper.close('right');
