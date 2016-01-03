@@ -241,3 +241,35 @@ input[type=range] {
       width: 160px;
 }
 
+#right-main {
+    position: relative;
+}
+
+.bottom-buttons {
+    display: inline;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.bottom-button > a {
+  display: inline-block;
+  border-bottom: 1px solid rgba(0,0,0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0px;
+  font-weight: bold;
+  text-shadow: 0 1px 0 #000;
+  text-decoration: none;
+  color: #ccc;
+  text-indent: 20px;
+  width: 49%;
+  overflow: hidden;    
+}
+.bottom-button > a:hover {
+    background: #323333;
+}
+.bottom-button > a:active {
+    background: #322222;
+}
+
+
