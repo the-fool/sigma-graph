@@ -1,6 +1,4 @@
-"use strict";
 var g = {
-      id: 0,
       nodes: [],
       edges: [],
       drawerNode: null
@@ -8,22 +6,38 @@ var g = {
     layoutEnum = Object.freeze({Fruchterman: 0, Dagre: 1}),
     layoutStyle = layoutEnum.Dagre;
 
-
-/*var NodeClass = (function closure(){
-
-    var static_id = 0; //static private (scoped) variable
-
-    function NodeClass() {
-        var id = 'n' + ++static_id,
-            name = 'CS' + (id + 10) * 10; 
-        
-        this.getId = function() { 
-            return id; 
-        };
+var Node = (function() {
+    var i,
+    id = 0,
+    cs = [],
+    C = 4;
+    
+    for (i = 0; i < C; i++)
+      cs.push({
+        id: i,
+        nodes: [],
+        color: '#' + (
+          Math.floor(Math.random() * 16777215).toString(16) + '000000'
+        ).substr(0, 6)
+      });
+    
+    function static_id(){ return i; };
+    function Node() {
+        var clr = cs[(Math.random() * C) | 0].color;
+        this.color = clr,
+        this.id = 'n' + i++,
+        this.name = 'CS' + (i + 10) * 10,
+        this.size = 1, // to be set by sigma global settings
+        this.glyphs = [{
+            position: 'center',
+            textColor: '#fff',
+            fillColor: clr,
+        }];
+        this.glyphs[0].content = this.name;
     }
-    return NodeClass;
-})();*/
-
+    Node.getStaticId = static_id;
+    return Node;
+})();
 
 (function(g) {
     var i,
@@ -37,6 +51,8 @@ var g = {
     
     for (i = 0; i < C; i++)
       cs.push({
+        id: i,
+        nodes: [],
         color: '#' + (
           Math.floor(Math.random() * 16777215).toString(16) + '000000'
         ).substr(0, 6)
@@ -44,21 +60,24 @@ var g = {
 
     for (i = 0; i < N; i++) {
       o = cs[(Math.random() * C) | 0];
+      n = new Node();    
       g.nodes.push({
         id: 'n' + i,
         name: 'CS' + (i + 10) * 10,
         x: 100 * Math.cos(2 * i * Math.PI / N),
         y: 100 * Math.sin(2 * i * Math.PI / N),
         color: o.color,
+        size: 1,
         glyphs: [{
               position: 'center',
                textColor: '#fff',
                fillColor: o.color,
                strokeColor: '#fff',
-               strokeIfText: false,
-              content: 'CS'+ (i + 10) * 10 
+               //strokeIfText: false,
+               content: 'CS'+ (i + 10) * 10
             }]  
       });
+      //o.nodes.push('n' + i);
     }
 
     for (i = 0; i < E; i++) {
@@ -183,10 +202,11 @@ function leftSnapClose() {
 function rightSnapClose() {
     arrowSpin('right');
     snapper.enable();
-    $('#toolbar').detach().appendTo($('#container'));
     setTimeout(function() {
+        $('#toolbar').detach().appendTo($('#container'));
         snapper.close('right');
     }, 300);
+    $('#toolbar').detach().appendTo($('#outside-container'));
     activeState.dropNodes();
     s.refresh({skipIndexation: true});
 }
@@ -203,8 +223,8 @@ function arrowSpin(leftOrRight) {
 }
 
 function createNode() {
-    
     console.log("noding");
+    s.graph.addNode()
 }
 
 
@@ -253,6 +273,7 @@ $(function() {
         $('#create-node').bind('click', function() {
            createNode(); 
         });
-    })(); 
+    })();
+    
     startLayout();
 });
