@@ -67,10 +67,10 @@
             // Border:
             if (borderSize > 0) {
                 context.beginPath();
-                context.fillStyle = settings('nodeBorderColor') === 'node' ? borderColor : settings('defaultNodeBorderColor');
+                context.strokeStyle = settings('nodeBorderColor') === 'node' ? borderColor : settings('defaultNodeBorderColor');
                 context.arc(x, y, size + borderSize, 0, Math.PI * 2, true);
                 context.closePath();
-                context.fill();
+                context.stroke();
             }
         }
 
@@ -97,17 +97,19 @@
             }
             sigma.utils.canvas.resetLevel(context);
         } else {
-            context.fillStyle = color;
-            context.beginPath();
-            context.arc(x, y, size, 0, Math.PI * 2, true);
-            context.closePath();
-            context.fill();
+            if (!node.active) {
+                context.fillStyle = color;
+                context.beginPath();
+                context.arc(x, y, size, 0, Math.PI * 2, true);
+                context.closePath();
+                context.fill();
 
-            sigma.utils.canvas.resetLevel(context);
+                sigma.utils.canvas.resetLevel(context);
 
-            if (!node.active && borderSize > 0 && (size > 2 * borderSize)) {
-                drawBorder(context, x, y, size, borderColor, borderSize);
-            }
+                if (!node.active && borderSize > 0 && (size > 2 * borderSize)) {
+                    drawBorder(context, x, y, size, borderColor, borderSize);
+                }
+            } 
         }
 
         // Image:
