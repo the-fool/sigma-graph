@@ -25,8 +25,8 @@ var Node = (function() {
     function Node() {
         var clr = cs[(Math.random() * C) | 0].color;
         this.color = clr,
-        this.id = 'n' + i++,
-        this.name = 'CS' + (i + 10) * 10,
+        this.id = 'n' + id++,
+        this.name = 'CS' + (id + 10) * 10,
         this.size = 1, // to be set by sigma global settings
         this.glyphs = [{
             position: 'center',
@@ -45,44 +45,20 @@ var Node = (function() {
     o,
     N = 30,
     E = 20,
-    C = 5,
-    d = 0.5,
-    cs = [];
+    d = 0.5;
+   
     
-    for (i = 0; i < C; i++)
-      cs.push({
-        id: i,
-        nodes: [],
-        color: '#' + (
-          Math.floor(Math.random() * 16777215).toString(16) + '000000'
-        ).substr(0, 6)
-      });
-
     for (i = 0; i < N; i++) {
-      o = cs[(Math.random() * C) | 0];
-      n = new Node();    
-      g.nodes.push({
-        id: 'n' + i,
-        name: 'CS' + (i + 10) * 10,
-        x: 100 * Math.cos(2 * i * Math.PI / N),
-        y: 100 * Math.sin(2 * i * Math.PI / N),
-        color: o.color,
-        size: 1,
-        glyphs: [{
-              position: 'center',
-               textColor: '#fff',
-               fillColor: o.color,
-               strokeColor: '#fff',
-               //strokeIfText: false,
-               content: 'CS'+ (i + 10) * 10
-            }]  
-      });
-      //o.nodes.push('n' + i);
+      n = new Node();
+      n.x = 100 * Math.cos(2 * i * Math.PI / N);
+      n.y = 100 * Math.sin(2 * i * Math.PI / N);
+      
+      g.nodes.push(n);
     }
 
     for (i = 0; i < E; i++) {
       var source = 'n' + (Math.random() * N | 0);
-      var target = 'n' + (Math.random() * N | 0);  
+      var target = 'n' + (Math.random() * N | 0);   
       g.edges.push({
           id: 'e' + i,
           source: source,
@@ -113,10 +89,10 @@ var s = new sigma({
     minArrowSize: 5,
     minNodeSize: 20,
     maxNodeSize: 20,
-    glyphScale: .9,
+    glyphScale: .999,
     glyphFontScale: .6,  
     glyphLineWidth: 1,
-    glyphStrokeIfText: true,
+    glyphStrokeIfText: false,
     glyphTextThreshold: 1,
     glyphThreshold: 6
   },
