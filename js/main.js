@@ -80,15 +80,19 @@ var Node = (function () {
     }
 })(g);
 
-sigma.renderers.def = sigma.renderers.canvas;
+//sigma.renderers.def = sigma.renderers.canvas;
 
 var s = new sigma({
     graph: g,
-    container: 'graph-container',
+    //container: 'graph-container',
+    renderer: {
+        container: document.getElementById('graph-container'),
+        type: 'canvas'
+    },
     settings: {
-        secondarySelectColor: '#fff',
+        secondaryActiveColor: '#fff',
         borderSize: 1,
-        outerBorderSize: 7,
+        outerBorderSize: 3,
         defaultNodeBorderColor: 'rgba(255,215,0,.1)',
         defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
         edgeHoverExtremities: true,

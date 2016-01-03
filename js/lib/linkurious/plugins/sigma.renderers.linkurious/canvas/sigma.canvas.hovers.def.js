@@ -79,6 +79,7 @@
 
     // Node border:
     if (borderSize > 0) {
+      
       context.beginPath();
       context.fillStyle = settings('nodeBorderColor') === 'node'
         ? borderColor
