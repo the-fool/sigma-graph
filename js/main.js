@@ -47,6 +47,9 @@ var Node = (function () {
     return Node;
 })();
 
+/*
+*  Populate dummy data
+*/
 (function (g) {
     var i,
         s,
@@ -170,6 +173,8 @@ function createNode() {
     console.log("noding");
     var n = new Node();
     s.graph.addNode(n);
+    activeState.dropNodes();
+    activeState.addNodes(n.id);
     s.refresh();
     startLayout();
 }
