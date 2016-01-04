@@ -1,109 +1,112 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/snap.css"/>
-        <link rel="stylesheet" type="text/css" href="css/style.css"/>
-        <link rel="stylesheet" href="css/font-awesome.css">
-    </head>
-    <body>
-      
-        <div class="snap-drawers">
-            <div class="snap-drawer snap-drawer-left">
-                <div>
-                  
-                    <h3><span class="drawer-titles" id="drawer-title">Drawer Title  </span>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css/snap.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/font-awesome.css">
+</head>
+
+<body>
+
+    <div class="snap-drawers">
+        <div class="snap-drawer snap-drawer-left">
+            <div>
+
+                <h3><span class="drawer-titles" id="drawer-title">Drawer Title  </span>
                         
                         <a id="close-left" href="#"><i class="fa fa-arrow-left"></i></a>
                     </h3>
-                   
-                    <h4>Kategorien</h4>
-                    <ul>
-                        <li><a>Info</a></li>
-                        <li><a>More Info</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="snap-drawer snap-drawer-right">
-                <div id="right-main">
-                    <h3> <a id="close-right" href="#"><i class="fa fa-arrow-right"></i></a> Edit <span class="drawer-titles">it.</span></h3>
-                    <h4>The Node</h4>
-                    <ul>
-                    <li><a id="edit-dependencies" href='#'>Edit dependencies</a></li>
-                    </ul>
-                   
-                </div>
-                <div class="bottom-buttons">
-                    <span id="create-node" class="bottom-button"><a href='#'>Create a Node</a></span>
-                    <span class="bottom-button"><a href='#'>Something Else</a></span>
-                </div>
-            </div>
-        </div>
-        
 
-        <div id="container" class="snap-content">
-            <div id="graph-container"></div>            
+                <h4>Kategorien</h4>
+                <ul>
+                    <li><a>Info</a></li>
+                    <li><a>More Info</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="outside-container">
+        <div class="snap-drawer snap-drawer-right">
+            <div id="right-main">
+                <h3> <a id="close-right" href="#"><i class="fa fa-arrow-right"></i></a> Edit <span class="drawer-titles">it.</span></h3>
+                <div id="node-info">
+                    <h4>Edit Prerequisites</h4>
+                    <ul id="prerequisite-list">
+                        <li><a id="edit-dependencies" href='#'>Edit dependencies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bottom-buttons">
+                <span id="create-node" class="bottom-button"><a href='#'>Create a Node</a></span>
+                <span class="bottom-button"><a href='#'>Something Else</a></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="container" class="snap-content">
+        <div id="graph-container"></div>
+    </div>
+    <div id="outside-container">
         <div id="toolbar">
-                <span id="layout-toggle">
+            <span id="layout-toggle">
                     <h2><a id="eye" href='#'><i class="fa fa-eye"></i></a></h2>
                 </span>
-                <span id="edit-toggle">
+            <span id="edit-toggle">
                     <h2><a id="wrench" href='#'><i class="fa fa-wrench"></i></a></h2>
                 </span>
         </div>
-        </div>
-         
-        <script src="js/lib/linkurious/examples/lib/dagre.js"></script>
-        <script src="js/lib/linkurious/src/sigma.core.js"></script>
-        <script src="js/lib/linkurious/src/conrad.js"></script>
-        <script src="js/lib/linkurious/src/utils/sigma.utils.js"></script>
-        <script src="js/lib/linkurious/src/utils/sigma.polyfills.js"></script>
-        <script src="js/lib/linkurious/src/sigma.settings.js"></script>
-        <script src="js/lib/linkurious/src/classes/sigma.classes.dispatcher.js"></script>
-        <script src="js/lib/linkurious/src/classes/sigma.classes.configurable.js"></script>
-        <script src="js/lib/linkurious/src/classes/sigma.classes.graph.js"></script>
-        <script src="js/lib/linkurious/src/classes/sigma.classes.camera.js"></script>
-        <script src="js/lib/linkurious/src/classes/sigma.classes.quad.js"></script>
-        <script src="js/lib/linkurious/src/captors/sigma.captors.mouse.js"></script>
-        <script src="js/lib/linkurious/src/captors/sigma.captors.touch.js"></script>
-        <script src="js/lib/linkurious/src/renderers/sigma.renderers.canvas.js"></script>
-        <script src="js/lib/linkurious/src/renderers/sigma.renderers.webgl.js"></script>
-        <script src="js/lib/linkurious/src/renderers/sigma.renderers.svg.js"></script>
-        <script src="js/lib/linkurious/src/renderers/sigma.renderers.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.nodes.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.nodes.fast.js"></script>
-        <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.edges.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.edges.fast.js"></script>
-        <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.edges.arrow.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.labels.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.curve.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.arrow.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.curve.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
-        <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.extremities.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.utils.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.nodes.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.edges.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.edges.curve.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.edges.curvedArrow.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.labels.def.js"></script>
-        <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.hovers.def.js"></script>
-        <script src="js/lib/linkurious/src/middlewares/sigma.middlewares.rescale.js"></script>
-        <script src="js/lib/linkurious/src/middlewares/sigma.middlewares.copy.js"></script>
-        <script src="js/lib/linkurious/src/misc/sigma.misc.animation.js"></script>
-        <script src="js/lib/linkurious/src/misc/sigma.misc.bindEvents.js"></script>
-        <script src="js/lib/linkurious/src/misc/sigma.misc.bindDOMEvents.js"></script>
-        <script src="js/lib/linkurious/src/misc/sigma.misc.drawHovers.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/settings.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.labels.def.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.hovers.def.js"></script>
-        <script src="js/sigma.canvas.nodes.def.js"></script>
-        
-        <!--<script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.cross.js"></script>
+    </div>
+
+    <script src="js/lib/linkurious/examples/lib/dagre.js"></script>
+    <script src="js/lib/linkurious/src/sigma.core.js"></script>
+    <script src="js/lib/linkurious/src/conrad.js"></script>
+    <script src="js/lib/linkurious/src/utils/sigma.utils.js"></script>
+    <script src="js/lib/linkurious/src/utils/sigma.polyfills.js"></script>
+    <script src="js/lib/linkurious/src/sigma.settings.js"></script>
+    <script src="js/lib/linkurious/src/classes/sigma.classes.dispatcher.js"></script>
+    <script src="js/lib/linkurious/src/classes/sigma.classes.configurable.js"></script>
+    <script src="js/lib/linkurious/src/classes/sigma.classes.graph.js"></script>
+    <script src="js/lib/linkurious/src/classes/sigma.classes.camera.js"></script>
+    <script src="js/lib/linkurious/src/classes/sigma.classes.quad.js"></script>
+    <script src="js/lib/linkurious/src/captors/sigma.captors.mouse.js"></script>
+    <script src="js/lib/linkurious/src/captors/sigma.captors.touch.js"></script>
+    <script src="js/lib/linkurious/src/renderers/sigma.renderers.canvas.js"></script>
+    <script src="js/lib/linkurious/src/renderers/sigma.renderers.webgl.js"></script>
+    <script src="js/lib/linkurious/src/renderers/sigma.renderers.svg.js"></script>
+    <script src="js/lib/linkurious/src/renderers/sigma.renderers.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.nodes.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.nodes.fast.js"></script>
+    <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.edges.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.edges.fast.js"></script>
+    <script src="js/lib/linkurious/src/renderers/webgl/sigma.webgl.edges.arrow.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.labels.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.curve.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.arrow.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.curve.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+    <script src="js/lib/linkurious/src/renderers/canvas/sigma.canvas.extremities.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.utils.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.nodes.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.edges.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.edges.curve.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.edges.curvedArrow.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.labels.def.js"></script>
+    <script src="js/lib/linkurious/src/renderers/svg/sigma.svg.hovers.def.js"></script>
+    <script src="js/lib/linkurious/src/middlewares/sigma.middlewares.rescale.js"></script>
+    <script src="js/lib/linkurious/src/middlewares/sigma.middlewares.copy.js"></script>
+    <script src="js/lib/linkurious/src/misc/sigma.misc.animation.js"></script>
+    <script src="js/lib/linkurious/src/misc/sigma.misc.bindEvents.js"></script>
+    <script src="js/lib/linkurious/src/misc/sigma.misc.bindDOMEvents.js"></script>
+    <script src="js/lib/linkurious/src/misc/sigma.misc.drawHovers.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/settings.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.labels.def.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.hovers.def.js"></script>
+    <script src="js/sigma.canvas.nodes.def.js"></script>
+
+    <!--<script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.cross.js"></script>
         <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.diamond.js"></script>
         <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.equilateral.js"></script>
         <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.square.js"></script>
@@ -112,35 +115,36 @@
         <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.curve.js"></script>
         <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.arrow.js"></script>
         <script src="js/lib/linkurious/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.curvedArrow.js"></script>-->
-        
-        <script src="js/lib/linkurious/plugins/sigma.renderers.glyphs/settings.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.renderers.glyphs/sigma.renderers.glyphs.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.helpers.graph/sigma.helpers.graph.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.plugins.keyboard/sigma.plugins.keyboard.js"></script>
-        <script src="js/sigma.plugins.activeState.js"></script>
-        <script src="js/sigma.plugins.select.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.layouts.fruchtermanReingold/sigma.layout.fruchtermanReingold.js"></script>
-        <script src="js/lib/linkurious/plugins/sigma.layouts.dagre/sigma.layout.dagre.js"></script>
-        
-        <script src="js/lib/jquery.js"></script>
-        <script src="js/lib/jquery.ui.js"></script>
-        <script src="js/lib/jquery.transit.min.js"></script>
-        
-        <script src="js/lib/Snap.js-develop/snap.js"></script>
-        <script type="text/javascript">
-            var snapper = new Snap({
-                    element: document.getElementById('container'),
-                    settings: {
-                        tapToClose: false
-                    }                
-            });
-        </script>
-        <script type="text/javascript" src="js/lib/skrollr.min.js"></script>
-        <script type="text/javascript">
-            var skrlr = skrollr.init();
-        </script>
-        
-        <script type="text/javascript" src="js/main.js"></script>
-    </body>
+
+    <script src="js/lib/linkurious/plugins/sigma.renderers.glyphs/settings.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.renderers.glyphs/sigma.renderers.glyphs.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.helpers.graph/sigma.helpers.graph.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.plugins.keyboard/sigma.plugins.keyboard.js"></script>
+    <script src="js/sigma.plugins.activeState.js"></script>
+    <script src="js/sigma.plugins.select.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.layouts.fruchtermanReingold/sigma.layout.fruchtermanReingold.js"></script>
+    <script src="js/lib/linkurious/plugins/sigma.layouts.dagre/sigma.layout.dagre.js"></script>
+
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/jquery.ui.js"></script>
+    <script src="js/lib/jquery.transit.min.js"></script>
+
+    <script src="js/lib/Snap.js-develop/snap.js"></script>
+    <script type="text/javascript">
+        var snapper = new Snap({
+            element: document.getElementById('container'),
+            settings: {
+                tapToClose: false
+            }
+        });
+    </script>
+    <script type="text/javascript" src="js/lib/skrollr.min.js"></script>
+    <script type="text/javascript">
+        var skrlr = skrollr.init();
+    </script>
+
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
 </html>

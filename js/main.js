@@ -177,7 +177,6 @@ function selectCallback(target) {
 }
 
 function createNode() {
-    console.log("noding");
     var n = new Node();
     s.graph.addNode(n);
     activeState.dropNodes();
@@ -188,9 +187,29 @@ function createNode() {
 }
 
 function setDrawerContent(node) {
+    var dependencies = [];
+    s.graph.edges().forEach(function (v, i, a) {
+        if (v.target === node.id) {
+            dependencies.push(s.graph.nodes(v.source));
+        }
+    });
+
     var txt = typeof node !== 'undefined' ? node.name : '';
+    var list = '';
+    if (dependencies.length > 0) {
+        dependencies.forEach(function (v) {
+            list += ('<li><a href="#">' + v.name + '</a></li>');
+        });
+    } else {
+        list = '<li><a> - none - </a></li>';
+    }
     $('.drawer-titles').fadeOut(200, function () {
-        $(this).text(txt)
+        $(this).text(txt);
+        $('#prerequisite-list').html(list);
+    }).fadeIn(200);
+
+    $('#node-info').fadeOut(200, function () {
+
     }).fadeIn(200);
 }
 
@@ -284,11 +303,11 @@ function arrowSpin(leftOrRight) {
     $('#create-node').bind('click', function () {
         createNode();
     });
-    $('#edit-dependencies').bind('click', function() {
-      console.log(s);    
-      s.secondaryMode = !s.secondaryMode;
+    $('#edit-dependencies').bind('click', function () {
+        console.log(s);
+        s.secondaryMode = !s.secondaryMode;
     });
-  
+
 })();
 
 
