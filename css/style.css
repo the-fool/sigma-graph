@@ -200,6 +200,9 @@
 .prereq-list {
     color: #ccc;
 }
+.node-edit-sublists {
+    display: none;
+}
 .remove-dependency {
      float: right;
     padding-right: 2em;

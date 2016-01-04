@@ -204,15 +204,19 @@ function setDrawerContent(node) {
         } else {
             list = '<li><a> - none - </a></li>'
         }
+        $('#node-edit-list').show();
+    } else {
+        $('#node-edit-list').hide({duration: 400});
     }
     $('.drawer-titles').fadeOut(200, function () {
-        $(this).text(txt);
-        $('#prerequisite-list').html(list);
+        $(this).text(txt); 
+        $('#prereq-list').hide().html(list).fadeIn(200);
     }).fadeIn(200, function () {
         $('.remove-dependency i').off('click').click(removeDependency);
         /* without the 'off', this binding will be duplicated, 
         /  due to how this function is called */
     });
+   
 }
 
 function removeDependency() {
@@ -312,7 +316,11 @@ function arrowSpin(leftOrRight) {
     $('#create-node').on('click', function () {
         createNode();
     });
-    $('#edit-dependencies').on('click', function () {
+    $('#edit-prereqs').on('click', function() {
+        $('.node-edit-sublists:not(#prereq-list)').hide();
+        $('#prereq-list').show();
+    })
+    $('#add-prereqs').on('click', function () {
         console.log(s);
         s.secondaryMode = !s.secondaryMode;
     });
