@@ -190,6 +190,7 @@ function setDrawerContent(node) {
     var dependencies = [],
         txt = '',
         list = '';
+    $('.node-edit-sublists').hide();
     if (typeof node !== 'undefined') {
         txt = node.name;
         s.graph.edges().forEach(function (v, i, a) {
@@ -204,13 +205,13 @@ function setDrawerContent(node) {
         } else {
             list = '<li><a> - none - </a></li>'
         }
+        $('#prereq-list').html(list);
         $('#node-edit-list').show();
     } else {
         $('#node-edit-list').hide({duration: 400});
     }
     $('.drawer-titles').fadeOut(200, function () {
         $(this).text(txt); 
-        $('#prereq-list').hide().html(list).fadeIn(200);
     }).fadeIn(200, function () {
         $('.remove-dependency i').off('click').click(removeDependency);
         /* without the 'off', this binding will be duplicated, 
