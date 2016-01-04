@@ -200,9 +200,18 @@
 .prereq-list {
     color: #ccc;
 }
+#node-edit-list {
+    display: none;
+}
 .node-edit-sublists {
     display: none;
 }
+.sublist-confirm {
+    display: none;
+    color: chartreuse;
+    float: right;
+}
+
 .remove-dependency {
      float: right;
     padding-right: 2em;

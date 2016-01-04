@@ -191,6 +191,7 @@ function setDrawerContent(node) {
         txt = '',
         list = '';
     $('.node-edit-sublists').hide();
+    $('.sublist-confirm').hide();
     if (typeof node !== 'undefined') {
         txt = node.name;
         s.graph.edges().forEach(function (v, i, a) {
@@ -213,17 +214,28 @@ function setDrawerContent(node) {
     $('.drawer-titles').fadeOut(200, function () {
         $(this).text(txt); 
     }).fadeIn(200, function () {
-        $('.remove-dependency i').off('click').click(removeDependency);
+        $('.remove-dependency i').off('click').click(clickRemovePrereq);
         /* without the 'off', this binding will be duplicated, 
         /  due to how this function is called */
     });
-   
 }
 
-function removeDependency() {
+function clearDrawerContent() {
+    $('.node-edit-sublists').hide();
+    $('.sublist-confirm').hide();
+    $('#node-edit-list').hide();
+}
+
+function clickRemovePrereq() {
     var $i = $(this),
         $li = $i.parent().parent();
     $li.toggleClass('li-prereq-selected');
+    if ($li.hasClass('li-prereq-selected') || $li.siblings('.li-prereq-selected').length > 0) {
+        console.log('check');
+        $('#confirm-remove-prereq').show();
+    } else {
+        $('#confirm-remove-prereq').hide();
+    }
     console.log($(this).data('id'));
 }
 
@@ -252,6 +264,7 @@ function rightSnapClose() {
     }, 300);
 
     activeState.dropNodes();
+    clearDrawerContent();
     s.refresh({
         skipIndexation: true
     });
