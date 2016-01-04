@@ -187,21 +187,23 @@ function createNode() {
 }
 
 function setDrawerContent(node) {
-    var dependencies = [];
-    s.graph.edges().forEach(function (v, i, a) {
-        if (v.target === node.id) {
-            dependencies.push(s.graph.nodes(v.source));
-        }
-    });
-
-    var txt = typeof node !== 'undefined' ? node.name : '';
-    var list = '';
-    if (dependencies.length > 0) {
-        dependencies.forEach(function (v) {
-            list += ('<li><a href="#">' + v.name + '</a><a class="remove-dependency"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
+    var dependencies = [],
+        txt = '',
+        list = '';
+    if (typeof node !== 'undefined') {
+        txt = node.name;
+        s.graph.edges().forEach(function (v, i, a) {
+            if (v.target === node.id) {
+                dependencies.push(s.graph.nodes(v.source));
+            }
         });
-    } else {
-        list = '<li><a> - none - </a></li>';
+        if (dependencies.length > 0) {
+            dependencies.forEach(function (v) {
+                list += ('<li><a href="#">' + v.name + '</a><a class="remove-dependency"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
+            });
+        } else {
+            list = '<li><a> - none - </a></li>'
+        }
     }
     $('.drawer-titles').fadeOut(200, function () {
         $(this).text(txt);
@@ -214,7 +216,7 @@ function setDrawerContent(node) {
 }
 
 function removeDependency() {
-    var $i = $(this),    
+    var $i = $(this),
         $li = $i.parent().parent();
     $li.toggleClass('li-prereq-selected');
     console.log($(this).data('id'));

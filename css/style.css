@@ -194,6 +194,9 @@
     text-indent: 20px;
     color: inherit;
 }
+.snap-drawer li > a:hover:not(.remove-dependency) {
+     color:blueviolet;
+}
 .prereq-list {
     color: #ccc;
 }
