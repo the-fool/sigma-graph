@@ -1,25 +1,24 @@
 #graph-container {
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      position: absolute;
-    }
-
-.snapjs-right .snap-drawer-left {
-	display: block;
-	right: 0;
-	left: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
 }
 
+.snapjs-right .snap-drawer-left {
+    display: block;
+    right: 0;
+    left: auto;
+}
 
 #toolbar {
-  text-align: right;
-  position: absolute;
-  bottom: 1px;
-  right: 0;
-  left: 0;
-  width: auto;
+    text-align: right;
+    position: absolute;
+    bottom: 1px;
+    right: 0;
+    left: 0;
+    width: auto;
     z-index: 2;
 }
 
@@ -29,118 +28,129 @@
 }
 
 #toolbar h1 {
-  color: #fff;
-  font-size: 16px;
-  line-height: 22px;
-  text-align: center;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
-  position: absolute;
-  top: 0;
-  right: 44px;
-  left: 44px;
-  width: auto;
-  height: 44px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    right: 44px;
+    left: 44px;
+    width: auto;
+    height: 44px;
 }
 
 #toolbar i:hover {
-    color:darksalmon;
+    color: darksalmon;
 }
 
 #toolbar i:active {
-    color:red;
+    color: red;
 }
 
 .toggler {
-	width: 80%;
-	background: rgba(255,255,255,0.5);
-	margin: 0 auto;
-	position: relative;
-	top: 70px;
-	padding: 20px;
-	margin-bottom: 20px;
-	text-align: center;
+    width: 80%;
+    background: rgba(255, 255, 255, 0.5);
+    margin: 0 auto;
+    position: relative;
+    top: 70px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
+
 /* Styles for expanding "Search" input in the "Expanding" demo */
+
 .search {
-	padding-bottom: 10px;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-	-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-	   -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-	        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 #search {
-	height: 30px;
-	width: 87%;
-	margin: 7px 7px 0 7px;
-	background: linear-gradient(#414A5A,#4C5464);
-	background: -webkit-linear-gradient(#414A5A,#4C5464);
-	padding-left: 15px;
-	border: 1px solid #222936;
-	-webkit-border-radius: 25px;
-	   -moz-border-radius: 25px;
-	        border-radius: 25px;
-	-webkit-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
-	   -moz-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
-	        box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+    height: 30px;
+    width: 87%;
+    margin: 7px 7px 0 7px;
+    background: linear-gradient(#414A5A, #4C5464);
+    background: -webkit-linear-gradient(#414A5A, #4C5464);
+    padding-left: 15px;
+    border: 1px solid #222936;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    -webkit-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(255, 255, 255, 0.4);
+    -moz-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(255, 255, 255, 0.4);
 }
 
 #search:focus {
-	outline: none;
-	border-color: #151515;
+    outline: none;
+    border-color: #151515;
 }
 
+
 /* Styles for fading out the drawer content in the "Expanding" demo */
+
 .drawer-inner {
-	-webkit-transition: opacity 0.3s ease; 
-	   -moz-transition: opacity 0.3s ease; 
-	    -ms-transition: opacity 0.3s ease; 
-	     -o-transition: opacity 0.3s ease; 
-	        transition: opacity 0.3s ease; 
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
 .snapjs-expand-left .drawer-inner,
 .snapjs-expand-right .drawer-inner {
-	opacity: 0;
+    opacity: 0;
 }
 
+
 /* Styles for the "Settings" demo */
+
 .opt {
-	padding: 20px;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .opt p {
-	font-weight: bold;
-	margin-top: 0;
-	margin-bottom: 5px;
-	color: #222;
-	color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #222;
+    color: rgba(0, 0, 0, 0.6);
 }
 
 .snap-content {
-  background: #BFC7D8;
-  background: -webkit-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Safari */
-  background: -o-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Opera 11.6 to 12.0 */
-  background: -moz-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Firefox 3.6 to 15 */
-  background: radial-gradient(#DBD9DE, #B1B0B1, #78DAD5); /* Standard syntax */
+    background: #BFC7D8;
+    background: -webkit-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5);
+    /* Safari */
+    background: -o-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5);
+    /* Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5);
+    /* Firefox 3.6 to 15 */
+    background: radial-gradient(#DBD9DE, #B1B0B1, #78DAD5);
+    /* Standard syntax */
 }
 
 .snap-drawers {
-  background: #323949;
+    background: #323949;
 }
 
 .snap-drawer {
-	background: #323949;
-	color: #eee;
+    background: #323949;
+    color: #eee;
 }
 
 .snap-drawer h3 {
-  font-size: 36px;
-  font-weight: normal;
-  margin: 15px;
+    font-size: 36px;
+    font-weight: normal;
+    margin: 15px;
 }
+
 .snap-drawer h3 i {
     color: chartreuse;
     padding-right: 5px;
@@ -153,92 +163,114 @@
 .snap-drawer-left h3 i {
     float: right;
 }
+
 .snap-drawer h4 {
-  padding: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 0;
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0;
 }
+
 .snap-drawer ul {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
+.snap-drawer li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.li-prereq-selected {
+    background: #322222;
+}
+.snap-drawer li.li-prereq-selected > a {
+    color:#AF5252;
+}
 .snap-drawer li > a {
-  display: block;
-  border-bottom: 1px solid rgba(0,0,0, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  font-weight: bold;
-  text-shadow: 0 1px 0 #000;
-  text-decoration: none;
-  color: #ccc;
-  text-indent: 20px;
+    display: inline-block;
+    padding: 15px;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #000;
+    text-decoration: none;
+    text-indent: 20px;
+    color: inherit;
+}
+.prereq-list {
+    color: #ccc;
+}
+.remove-dependency {
+     float: right;
+    padding-right: 2em;
+}
+.remove-dependency > i:hover {
+    color:blueviolet;
+}
+.remove-dependency > i:active {
+    color:firebrick;
 }
 
-.snap-drawer li:hover {
+.snap-drawer li:hover:not(.li-prereq-selected)  {
     background: #323333;
 }
+
 .snap-drawer li:active {
     background: #322222;
 }
 
 .snap-drawer p {
-  opacity: 0.5;
-  padding: 15px;
-  font-size: 12px;
+    opacity: 0.5;
+    padding: 15px;
+    font-size: 12px;
 }
 
 #control-pane {
-      top: 10px;
-      /*bottom: 10px;*/
-      right: 10px;
-      position: absolute;
-      width: 230px;
-      background-color: rgb(249, 247, 237);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    top: 10px;
+    /*bottom: 10px;*/
+    right: 10px;
+    position: absolute;
+    width: 230px;
+    background-color: rgb(249, 247, 237);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 #control-pane > div {
-      margin: 10px;
-      overflow-x: auto;
+    margin: 10px;
+    overflow-x: auto;
 }
 
 #edit-toggle {
-    
     margin-right: 20px;
 }
 
 .line {
-      clear: both;
-      display: block;
-      width: 100%;
-      margin: 0;
-      padding: 12px 0 0 0;
-      border-bottom: 1px solid #aac789;
-      background: transparent;
+    clear: both;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 12px 0 0 0;
+    border-bottom: 1px solid #aac789;
+    background: transparent;
 }
 
 .green {
-      color: #437356;
+    color: #437356;
 }
 
 h2.underline {
-      color: #437356;
-      background: #f4f0e4;
-      margin: 0;
-      border-radius: 2px;
-      padding: 8px 12px;
-      font-weight: 700;
+    color: #437356;
+    background: #f4f0e4;
+    margin: 0;
+    border-radius: 2px;
+    padding: 8px 12px;
+    font-weight: 700;
 }
 
 .hidden {
-      display: none;
-      visibility: hidden;
+    display: none;
+    visibility: hidden;
 }
 
 input[type=range] {
-      width: 160px;
+    width: 160px;
 }
 
 #right-main {
@@ -253,23 +285,23 @@ input[type=range] {
 }
 
 .bottom-button > a {
-  display: inline-block;
-  border-bottom: 1px solid rgba(0,0,0, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px 0px;
-  font-weight: bold;
-  text-shadow: 0 1px 0 #000;
-  text-decoration: none;
-  color: #ccc;
-  text-indent: 20px;
-  width: 49%;
-  overflow: hidden;    
+    display: inline-block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 0px;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #000;
+    text-decoration: none;
+    color: #ccc;
+    text-indent: 20px;
+    width: 49%;
+    overflow: hidden;
 }
+
 .bottom-button > a:hover {
     background: #323333;
 }
+
 .bottom-button > a:active {
     background: #322222;
 }
-
-

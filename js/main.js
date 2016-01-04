@@ -198,7 +198,7 @@ function setDrawerContent(node) {
     var list = '';
     if (dependencies.length > 0) {
         dependencies.forEach(function (v) {
-            list += ('<li><a href="#">' + v.name + '</a></li>');
+            list += ('<li><a href="#">' + v.name + '</a><a class="remove-dependency"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
         });
     } else {
         list = '<li><a> - none - </a></li>';
@@ -206,11 +206,18 @@ function setDrawerContent(node) {
     $('.drawer-titles').fadeOut(200, function () {
         $(this).text(txt);
         $('#prerequisite-list').html(list);
-    }).fadeIn(200);
+    }).fadeIn(200, function () {
+        $('.remove-dependency i').off('click').click(removeDependency);
+        /* without the 'off', this binding will be duplicated, 
+        /  due to how this function is called */
+    });
+}
 
-    $('#node-info').fadeOut(200, function () {
-
-    }).fadeIn(200);
+function removeDependency() {
+    var $i = $(this),    
+        $li = $i.parent().parent();
+    $li.toggleClass('li-prereq-selected');
+    console.log($(this).data('id'));
 }
 
 function leftSnapClose() {
@@ -259,21 +266,21 @@ function arrowSpin(leftOrRight) {
 }
 
 /*
- ** All event bindings
+ ** All static event bindings
  **
  */
 (function () {
 
-    $('#close-left i').bind('click', function () {
+    $('#close-left i').on('click', function () {
         leftSnapClose();
     });
 
-    $('#close-right i').bind('click', function () {
+    $('#close-right i').on('click', function () {
         rightSnapClose();
     });
 
 
-    $('#wrench').bind('click', function () {
+    $('#wrench').on('click', function () {
         if (snapper.state().state === 'right') {
             rightSnapClose();
             snapper.enable();
@@ -286,7 +293,7 @@ function arrowSpin(leftOrRight) {
     });
 
 
-    $('#eye').bind('click', function () {
+    $('#eye').on('click', function () {
         switch (layoutStyle) {
         case layoutEnum.Dagre:
             layoutStyle = layoutEnum.Fruchterman;
@@ -300,13 +307,14 @@ function arrowSpin(leftOrRight) {
         startLayout();
     });
 
-    $('#create-node').bind('click', function () {
+    $('#create-node').on('click', function () {
         createNode();
     });
-    $('#edit-dependencies').bind('click', function () {
+    $('#edit-dependencies').on('click', function () {
         console.log(s);
         s.secondaryMode = !s.secondaryMode;
     });
+
 
 })();
 
