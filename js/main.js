@@ -312,7 +312,9 @@ function arrowSpin(leftOrRight) {
     $('#wrench').on('click', function () {
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('wrench-edit-mode');
-        leftSnapOpen();
+        if (snapper.state().state === 'closed' && $(this).hasClass('wrench-edit-mode')) {
+            leftSnapOpen();
+        }
     });
 
 
