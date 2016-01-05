@@ -10,39 +10,27 @@
 
     <div class="snap-drawers">
         <div class="snap-drawer snap-drawer-left">
-            <div>
-
-                <h3><span class="drawer-titles" id="drawer-title">Drawer Title  </span>
-                        
-                        <a id="close-left" href="#"><i class="fa fa-arrow-left"></i></a>
-                    </h3>
-
-                <h4>Kategorien</h4>
-                <ul>
-                    <li><a>Info</a></li>
-                    <li><a>More Info</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="snap-drawer snap-drawer-right">
-            <div id="right-main">
-                <h3> <a id="close-right" href="#"><i class="fa fa-arrow-right"></i></a> Edit <span class="drawer-titles">it.</span></h3>
-                <div id="node-edit-list">
+            <div id="left-main">
+                <h3> <a id="close-left" href="#"><i class="fa fa-arrow-left"></i></a><span class="drawer-titles"></span></h3>
+                <div id="node-info-list">
                     <h4>
-                        <a id="edit-prereqs" href="#">Edit Prerequisites</a>
+                        <a id="prereqs" href="#">Prerequisites</a>
                         <a id="confirm-remove-prereq" class="sublist-confirm" href="#">
                             <i class="fa fa-check-square-o fa-lg"></i>
                         </a>
                     </h4>
-                    <ul id="prereq-list" class="prereq-list node-edit-sublists">
-                        <li><a id="edit-dependencies" href='#'>Edit dependencies</a></li>
+                    <ul id="prereq-list" class="prereq-list node-info-sublists">
+                        <li><a id="edit-dependencies" href='#'>Add prereqs</a></li>
                     </ul>
-                    <h4><a id="edit-postreqs">Edit Postrequisites</a></h4>
-                    <ul id="postreq-list" class="postreq-list node-edit-sublists">
+                    <h4>
+                        <a id="postreqs">Edit Postrequisites</a>
+                    </h4>
+                    <ul id="postreq-list" class="postreq-list node-info-sublists">
                         <li><a href="#">Dummy</a></li>
                     </ul>
-                    <h4><a id="edit-info">Edit Info</a></h4>
-                    
+                    <h4>
+                        <a id="node-info">Course Info</a>
+                    </h4>
                 </div>
             </div>
             <div class="bottom-buttons">
@@ -51,7 +39,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="container" class="snap-content">
         <div id="graph-container"></div>
