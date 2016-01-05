@@ -71,8 +71,13 @@ var Node = (function () {
     for (i = 0; i < E; i++) {
         var source = 'n' + (Math.random() * N | 0);
         var target = 'n' + (Math.random() * N | 0);
+        if ($.inArray([source, target].join(), g.edges) !== -1) {
+            i--;
+            console.log('dup');
+            continue;
+        }
         g.edges.push({
-            id: 'e' + i,
+            id: [source, target].join(),
             source: source,
             target: target,
             type: (source === target) ? 'curvedArrow' : 'arrow',
@@ -166,9 +171,9 @@ function selectCallback(target) {
     if (target.length === 0 && g.drawerNode !== null) {
         leftSnapClose();
     } else {
+        g.drawerNode = target[0];
         setDrawerContent(s.graph.nodes(target)[0]);
         if (snapper.state().state === 'closed') {
-            g.drawerNode = target;
             leftSnapOpen();
         } else {
             arrowSpin('left');
@@ -223,10 +228,10 @@ function setDrawerContent(node) {
         });
         if (prereqs.length > 0) {
             prereqs.forEach(function (v) {
-                list += ('<li><a href="#">' + v.name + '</a><a class="remove-prereq"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
+                list += ('<li data-id="' + v.id + '"><a href="#">' + v.name + '</a><a class="remove-prereq"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
             });
         } else {
-            list = '<li><a> - none - </a></li>'
+            list = '<li><a> - none - </a></li>';
         }
         $('#prereq-list').html(list);
         $('#node-info-list').show();
@@ -264,14 +269,27 @@ function clickRemovePrereq() {
     } else {
         $('#confirm-remove-prereq').hide(400);
     }
-    console.log($(this).data('id'));
 }
 
 function removePrereqs() {
     var selected = $('#prereq-list li.li-prereq-selected');
     selected.toggleClass('li-prereq-selected');
     $('#confirm-remove-prereq').hide(400);
-    selected.slideToggle();
+    selected.slideToggle({
+        always: function () {
+            if ($('#prereq-list').children().length === 0) {
+                $('#prereq-list').prepend('<li><a> - none - </a></li>').hide().show({
+                    duration: 400
+                });
+            }
+        }
+    });
+    selected.each(function () {
+        s.graph.dropEdges([$(this).data('id'), g.drawerNode].join());
+    });
+    startLayout();
+    selected.remove();
+
 }
 
 /*function rightSnapClose() {
