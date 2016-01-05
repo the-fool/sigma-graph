@@ -209,7 +209,7 @@ function createNode() {
 }
 
 function setDrawerContent(node) {
-    var dependencies = [],
+    var prereqs = [],
         txt = '',
         list = '';
     $('.node-info-sublists').hide();
@@ -218,12 +218,12 @@ function setDrawerContent(node) {
         txt = node.name;
         s.graph.edges().forEach(function (v, i, a) {
             if (v.target === node.id) {
-                dependencies.push(s.graph.nodes(v.source));
+                prereqs.push(s.graph.nodes(v.source));
             }
         });
-        if (dependencies.length > 0) {
-            dependencies.forEach(function (v) {
-                list += ('<li><a href="#">' + v.name + '</a><a class="remove-dependency"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
+        if (prereqs.length > 0) {
+            prereqs.forEach(function (v) {
+                list += ('<li><a href="#">' + v.name + '</a><a class="remove-prereq"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
             });
         } else {
             list = '<li><a> - none - </a></li>'
@@ -238,14 +238,14 @@ function setDrawerContent(node) {
     $('.drawer-title').fadeOut(200, function () {
         $(this).text(txt);
     }).fadeIn(200, function () {
-        $('.remove-dependency i').off('click').click(clickRemovePrereq);
+        $('.remove-prereq i').off('click').click(clickRemovePrereq);
         /* without the 'off', this binding will be duplicated, 
         /  due to how this function is called */
     });
 }
 
 function clearDrawerContent() {
-    if ($('#wrench').hasClass('wrench-edit-mode')) {
+    if (editMode) {
         $('.drawer-title').text('Edit mode').fadeIn(200);
     }
     $('.node-info-sublists').hide();
@@ -259,7 +259,9 @@ function clickRemovePrereq() {
     $li.toggleClass('li-prereq-selected');
     if ($li.hasClass('li-prereq-selected') || $li.siblings('.li-prereq-selected').length > 0) {
         console.log('check');
-        $('#confirm-remove-prereq').show({duration:400});
+        $('#confirm-remove-prereq').show({
+            duration: 400
+        });
     } else {
         $('#confirm-remove-prereq').hide();
     }
@@ -267,7 +269,7 @@ function clickRemovePrereq() {
 }
 
 
-function rightSnapClose() {
+/*function rightSnapClose() {
     arrowSpin('right');
     snapper.enable();
     $('.drawer-title').fadeOut(200);
@@ -281,7 +283,7 @@ function rightSnapClose() {
     s.refresh({
         skipIndexation: true
     });
-}
+}*/
 
 function arrowSpin(leftOrRight) {
     var i = leftOrRight === 'left' ? $('#close-left i') : $('#close-right i');
@@ -314,6 +316,7 @@ function arrowSpin(leftOrRight) {
 
 
     $('#wrench').on('click', function () {
+        editMode = !editMode;
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('wrench-edit-mode');
         $('#new-node').slideToggle();
@@ -343,12 +346,14 @@ function arrowSpin(leftOrRight) {
     $('#create-node').on('click', function () {
         createNode();
     });
-    
+
     $('#prereqs').on('click', function () {
         $('.node-info-sublists:not(#prereq-list)').hide();
-        $('#prereq-list').toggle({duration: 300});
-    }); 
-    
+        $('#prereq-list').toggle({
+            duration: 300
+        });
+    });
+
     $('#add-prereqs').on('click', function () {
         console.log(s);
         s.secondaryMode = !s.secondaryMode;

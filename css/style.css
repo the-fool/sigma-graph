@@ -173,7 +173,7 @@
     text-indent: 20px;
     color: inherit;
 }
-.snap-drawer li > a:hover:not(.remove-dependency) {
+.snap-drawer li > a:hover:not(.remove-prereq) {
      color:blueviolet;
 }
 .prereq-list {
@@ -191,14 +191,14 @@
     float: right;
 }
 
-.remove-dependency {
+.remove-prereq {
      float: right;
     padding-right: 2em;
 }
-.remove-dependency > i:hover {
+.remove-prereq > i:hover {
     color:blueviolet;
 }
-.remove-dependency > i:active {
+.remove-prereq > i:active {
     color:firebrick;
 }
 
