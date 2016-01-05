@@ -258,16 +258,21 @@ function clickRemovePrereq() {
         $li = $i.parent().parent();
     $li.toggleClass('li-prereq-selected');
     if ($li.hasClass('li-prereq-selected') || $li.siblings('.li-prereq-selected').length > 0) {
-        console.log('check');
         $('#confirm-remove-prereq').show({
             duration: 400
         });
     } else {
-        $('#confirm-remove-prereq').hide();
+        $('#confirm-remove-prereq').hide(400);
     }
     console.log($(this).data('id'));
 }
 
+function removePrereqs() {
+    var selected = $('#prereq-list li.li-prereq-selected');
+    selected.toggleClass('li-prereq-selected');
+    $('#confirm-remove-prereq').hide(400);
+    selected.slideToggle();
+}
 
 /*function rightSnapClose() {
     arrowSpin('right');
@@ -319,7 +324,14 @@ function arrowSpin(leftOrRight) {
         editMode = !editMode;
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('wrench-edit-mode');
-        $('#prereq-list').toggleClass('prereq-list-edit-mode');
+        if ($('.remove-prereq').slideToggle({
+                always: function () {
+                    $('#prereq-list').toggleClass('prereq-list-edit-mode');
+                }
+            }).length === 0) {
+            // guarantee that the class is toggled once --- this way of doing so is likely more efficient than searching the DOM multiple times
+            $('#prereq-list').toggleClass('prereq-list-edit-mode');
+        }
         $('#new-node').slideToggle();
         if (activeState.nodes().length === 0) {
             clearDrawerContent();
@@ -359,6 +371,10 @@ function arrowSpin(leftOrRight) {
         console.log(s);
         s.secondaryMode = !s.secondaryMode;
     });
+
+    $('#confirm-remove-prereq').on('click', function () {
+        removePrereqs();
+    })
 })();
 
 

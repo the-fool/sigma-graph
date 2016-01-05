@@ -17,6 +17,7 @@
     background: radial-gradient(#DBD9DE, #B1B0B1, #78DAD5);
     /* Standard syntax */
 }
+
 .snap-content-edit-mode {
     background: #475050;
     background: -webkit-radial-gradient(#A8A3B1, #A099A0, #475050);
@@ -25,7 +26,7 @@
     /* Opera 11.6 to 12.0 */
     background: -moz-radial-gradient(#A8A3B1, #A099A0, #475050);
     /* Firefox 3.6 to 15 */
-    background:radial-gradient(#A8A3B1, #A099A0, #475050);
+    background: radial-gradient(#A8A3B1, #A099A0, #475050);
     /* Standard syntax */
 }
 
@@ -34,7 +35,6 @@
     right: 0;
     left: auto;
 }
-
 
 .wrench-edit-mode {
     color: #ECAD88;
@@ -158,12 +158,15 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .li-prereq-selected {
     background: #322222;
 }
+
 .snap-drawer li.li-prereq-selected > a {
-    color:#AF5252;
+    color: #AF5252;
 }
+
 .snap-drawer li > a {
     display: inline-block;
     padding: 15px;
@@ -173,26 +176,32 @@
     text-indent: 20px;
     color: inherit;
 }
+
 .snap-drawer li > a:hover:not(.remove-prereq) {
-     color:blueviolet;
+    color: blueviolet;
 }
 
 #prereq-list {
     color: #ccc;
 }
+
 #prereq-list.prereq-list-edit-mode .remove-prereq {
     display: inline-block;
     color: #9E7E7E
 }
+
 #prereq-list li > a.remove-prereq {
     display: none;
 }
+
 #node-edit-list {
     display: none;
 }
+
 .node-edit-sublists {
     display: none;
 }
+
 .sublist-confirm {
     display: none;
     color: chartreuse;
@@ -200,17 +209,19 @@
 }
 
 .remove-prereq {
-     float: right;
+    float: right;
     padding-right: 2em;
 }
+
 .remove-prereq > i:hover {
-    color:blueviolet;
-}
-.remove-prereq > i:active {
-    color:firebrick;
+    color: blueviolet;
 }
 
-.snap-drawer li:hover:not(.li-prereq-selected)  {
+.remove-prereq > i:active {
+    color: firebrick;
+}
+
+.snap-drawer li:hover:not(.li-prereq-selected) {
     background: #323333;
 }
 
@@ -240,7 +251,7 @@
 }
 
 #edit-toggle {
- /*   margin-right: 20px; */
+    /*   margin-right: 20px; */
 }
 
 #toolbar span#new-node {
