@@ -167,13 +167,34 @@ function selectCallback(target) {
     } else {
         setDrawerContent(s.graph.nodes(target)[0]);
         if (snapper.state().state === 'closed') {
-            $('#toolbar').detach().appendTo($('#outside-container'));
             g.drawerNode = target;
-            snapper.open('left');
-            snapper.disable();
+            leftSnapOpen();
+        } else {
+            arrowSpin('left');
         }
     }
+}
+
+function leftSnapOpen() {
+    $('#toolbar').detach().appendTo($('#outside-container'));
+    snapper.open('left');
     arrowSpin('left');
+    snapper.disable();
+}
+
+function leftSnapClose() {
+    arrowSpin('left');
+    snapper.enable();
+    g.drawerNode = null;
+    setTimeout(function () {
+        snapper.close('left');
+        $('#toolbar').detach().appendTo($('#outside-container'));
+    }, 300);
+    activeState.dropNodes();
+    s.refresh({
+        skipIndexation: true
+    });
+    $('#drawer-title').fadeOut();
 }
 
 function createNode() {
@@ -209,10 +230,12 @@ function setDrawerContent(node) {
         $('#prereq-list').html(list);
         $('#node-edit-list').show();
     } else {
-        $('#node-edit-list').hide({duration: 400});
+        $('#node-edit-list').hide({
+            duration: 400
+        });
     }
     $('.drawer-titles').fadeOut(200, function () {
-        $(this).text(txt); 
+        $(this).text(txt);
     }).fadeIn(200, function () {
         $('.remove-dependency i').off('click').click(clickRemovePrereq);
         /* without the 'off', this binding will be duplicated, 
@@ -239,20 +262,6 @@ function clickRemovePrereq() {
     console.log($(this).data('id'));
 }
 
-function leftSnapClose() {
-    arrowSpin('left');
-    snapper.enable();
-    g.drawerNode = null;
-    setTimeout(function () {
-        snapper.close('left');
-        $('#toolbar').detach().appendTo($('#outside-container'));
-    }, 300);
-    activeState.dropNodes();
-    s.refresh({
-        skipIndexation: true
-    });
-    $('#drawer-title').fadeOut();
-}
 
 function rightSnapClose() {
     arrowSpin('right');
@@ -303,16 +312,7 @@ function arrowSpin(leftOrRight) {
     $('#wrench').on('click', function () {
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('wrench-edit-mode');
-        
-        if (snapper.state().state === 'right') {
-            rightSnapClose();
-            snapper.enable();
-        } else {
-            $('#toolbar').detach().appendTo($('#container'));
-            snapper.open('right');
-            arrowSpin('right');
-            snapper.disable();
-        }
+        leftSnapOpen();
     });
 
 
@@ -333,10 +333,12 @@ function arrowSpin(leftOrRight) {
     $('#create-node').on('click', function () {
         createNode();
     });
-    $('#edit-prereqs').on('click', function() {
+    
+    $('#edit-prereqs').on('click', function () {
         $('.node-edit-sublists:not(#prereq-list)').hide();
         $('#prereq-list').show();
-    })
+    }); 
+    
     $('#add-prereqs').on('click', function () {
         console.log(s);
         s.secondaryMode = !s.secondaryMode;
