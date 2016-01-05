@@ -301,6 +301,9 @@ function arrowSpin(leftOrRight) {
 
 
     $('#wrench').on('click', function () {
+        $('.snap-content').toggleClass('snap-content-edit-mode');
+        $(this).toggleClass('wrench-edit-mode');
+        
         if (snapper.state().state === 'right') {
             rightSnapClose();
             snapper.enable();
