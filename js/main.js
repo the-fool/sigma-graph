@@ -71,9 +71,8 @@ var Node = (function () {
     for (i = 0; i < E; i++) {
         var source = 'n' + (Math.random() * N | 0);
         var target = 'n' + (Math.random() * N | 0);
-        if ($.inArray([source, target].join(), g.edges) !== -1) {
+        if ($.inArray([source, target].join(), g.edges.map(function(obj) {return obj.id;})) !== -1) {
             i--;
-            console.log('dup');
             continue;
         }
         g.edges.push({
@@ -228,11 +227,12 @@ function setDrawerContent(node) {
         });
         if (prereqs.length > 0) {
             prereqs.forEach(function (v) {
-                list += ('<li data-id="' + v.id + '"><a href="#">' + v.name + '</a><a class="remove-prereq"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>');
+                list += '<li data-id="' + v.id + '"><a href="#">' + v.name + '</a><a class="remove-prereq prereq-opt-edit-mode"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
             });
         } else {
             list = '<li><a> - none - </a></li>';
         }
+        list += '<li id="li-new-prereq" class="prereq-opt-edit-mode"><a id="new-prereq" href="#"> - Create New Prereq - </a></li>';
         $('#prereq-list').html(list);
         $('#node-info-list').show();
     } else {
@@ -277,18 +277,19 @@ function removePrereqs() {
     $('#confirm-remove-prereq').hide(400);
     selected.slideToggle({
         always: function () {
-            if ($('#prereq-list').children().length === 0) {
+            if ($('#prereq-list').children('li').length === 1) {
                 $('#prereq-list').prepend('<li><a> - none - </a></li>').hide().show({
                     duration: 400
                 });
             }
+        $(this).remove();
         }
     });
     selected.each(function () {
         s.graph.dropEdges([$(this).data('id'), g.drawerNode].join());
     });
     startLayout();
-    selected.remove();
+    
 
 }
 
@@ -350,6 +351,7 @@ function arrowSpin(leftOrRight) {
             // guarantee that the class is toggled once --- this way of doing so is likely more efficient than searching the DOM multiple times
             $('#prereq-list').toggleClass('prereq-list-edit-mode');
         }
+        $('#li-new-prereq').slideToggle();
         $('#new-node').slideToggle();
         if (activeState.nodes().length === 0) {
             clearDrawerContent();

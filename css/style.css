@@ -185,8 +185,7 @@
     color: #ccc;
 }
 
-#prereq-list.prereq-list-edit-mode .remove-prereq {
-    display: inline-block;
+#prereq-list.prereq-list-edit-mode .prereq-opt-edit-mode {
     color: #9E7E7E
 }
 
@@ -198,6 +197,9 @@
     display: none;
 }
 
+#li-new-prereq {
+    display: none;
+}
 .node-edit-sublists {
     display: none;
 }
