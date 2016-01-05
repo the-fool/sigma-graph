@@ -35,41 +35,7 @@
     left: auto;
 }
 
-#toolbar {
-    text-align: right;
-    position: absolute;
-    bottom: 1px;
-    right: 0;
-    width: 20%;
-    z-index: 2;
-}
 
-#toolbar span {
-    display: inline-block;
-    padding-right: 1em;
-}
-
-#toolbar h1 {
-    color: #fff;
-    font-size: 16px;
-    line-height: 22px;
-    text-align: center;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
-    position: absolute;
-    top: 0;
-    right: 44px;
-    left: 44px;
-    width: auto;
-    height: 44px;
-}
-
-#toolbar i:hover {
-    color: darksalmon;
-}
-
-#toolbar i:active {
-    color: red;
-}
 .wrench-edit-mode {
     color: #ECAD88;
 }
@@ -266,7 +232,12 @@
 }
 
 #edit-toggle {
-    margin-right: 20px;
+ /*   margin-right: 20px; */
+}
+
+#toolbar span#new-node {
+    height: 30px;
+    display: none;
 }
 
 .line {
@@ -332,4 +303,40 @@ input[type=range] {
 
 .bottom-button > a:active {
     background: #322222;
+}
+
+#toolbar {
+    text-align: right;
+    position: absolute;
+    bottom: 1px;
+    right: 0;
+    width: 20%;
+    z-index: 2;
+}
+
+#toolbar span {
+    display: inline-block;
+    padding-right: 1em;
+}
+
+#toolbar h1 {
+    color: #fff;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    right: 44px;
+    left: 44px;
+    width: auto;
+    height: 44px;
+}
+
+#toolbar i:hover {
+    color: darksalmon;
+}
+
+#toolbar i:active {
+    color: red;
 }

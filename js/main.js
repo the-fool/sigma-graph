@@ -7,7 +7,8 @@ var g = {
         Fruchterman: 0,
         Dagre: 1
     }),
-    layoutStyle = layoutEnum.Dagre;
+    layoutStyle = layoutEnum.Dagre,
+    editMode = false;
 
 var Node = (function () {
     var i,
@@ -211,7 +212,7 @@ function setDrawerContent(node) {
     var dependencies = [],
         txt = '',
         list = '';
-    $('.node-edit-sublists').hide();
+    $('.node-info-sublists').hide();
     $('.sublist-confirm').hide();
     if (typeof node !== 'undefined') {
         txt = node.name;
@@ -234,7 +235,7 @@ function setDrawerContent(node) {
             duration: 400
         });
     }
-    $('.drawer-titles').fadeOut(200, function () {
+    $('.drawer-title').fadeOut(200, function () {
         $(this).text(txt);
     }).fadeIn(200, function () {
         $('.remove-dependency i').off('click').click(clickRemovePrereq);
@@ -244,6 +245,9 @@ function setDrawerContent(node) {
 }
 
 function clearDrawerContent() {
+    if ($('#wrench').hasClass('wrench-edit-mode')) {
+        $('.drawer-title').text('Edit mode').fadeIn(200);
+    }
     $('.node-info-sublists').hide();
     $('.sublist-confirm').hide();
     $('#node-info-list').hide();
@@ -255,7 +259,7 @@ function clickRemovePrereq() {
     $li.toggleClass('li-prereq-selected');
     if ($li.hasClass('li-prereq-selected') || $li.siblings('.li-prereq-selected').length > 0) {
         console.log('check');
-        $('#confirm-remove-prereq').show();
+        $('#confirm-remove-prereq').show({duration:400});
     } else {
         $('#confirm-remove-prereq').hide();
     }
@@ -266,7 +270,7 @@ function clickRemovePrereq() {
 function rightSnapClose() {
     arrowSpin('right');
     snapper.enable();
-    $('.drawer-titles').fadeOut(200);
+    $('.drawer-title').fadeOut(200);
     setTimeout(function () {
         $('#toolbar').detach().appendTo($('#container'));
         snapper.close('right');
@@ -312,9 +316,13 @@ function arrowSpin(leftOrRight) {
     $('#wrench').on('click', function () {
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('wrench-edit-mode');
-        if (snapper.state().state === 'closed' && $(this).hasClass('wrench-edit-mode')) {
-            leftSnapOpen();
+        $('#new-node').slideToggle();
+        if (activeState.nodes().length === 0) {
+            clearDrawerContent();
         }
+        /*if (snapper.state().state === 'closed' && $(this).hasClass('wrench-edit-mode')) {
+            leftSnapOpen();
+        } */
     });
 
 
@@ -338,7 +346,7 @@ function arrowSpin(leftOrRight) {
     
     $('#prereqs').on('click', function () {
         $('.node-info-sublists:not(#prereq-list)').hide();
-        $('#prereq-list').show();
+        $('#prereq-list').toggle({duration: 300});
     }); 
     
     $('#add-prereqs').on('click', function () {
