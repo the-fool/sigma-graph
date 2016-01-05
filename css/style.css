@@ -176,8 +176,16 @@
 .snap-drawer li > a:hover:not(.remove-prereq) {
      color:blueviolet;
 }
-.prereq-list {
+
+#prereq-list {
     color: #ccc;
+}
+#prereq-list.prereq-list-edit-mode .remove-prereq {
+    display: inline-block;
+    color: #9E7E7E
+}
+#prereq-list li > a.remove-prereq {
+    display: none;
 }
 #node-edit-list {
     display: none;

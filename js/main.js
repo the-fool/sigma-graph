@@ -319,6 +319,7 @@ function arrowSpin(leftOrRight) {
         editMode = !editMode;
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('wrench-edit-mode');
+        $('#prereq-list').toggleClass('prereq-list-edit-mode');
         $('#new-node').slideToggle();
         if (activeState.nodes().length === 0) {
             clearDrawerContent();
