@@ -227,7 +227,7 @@ function setDrawerContent(node) {
         });
         if (prereqs.length > 0) {
             prereqs.forEach(function (v) {
-                list += '<li data-id="' + v.id + '"><a href="#">' + v.name + '</a><a class="remove-prereq prereq-opt-edit-mode"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
+                list += '<li data-id="' + v.id + '"><a href="#" class="heading-txt">' + v.name + '</a><a class="remove-prereq prereq-opt-edit-mode"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
             });
         } else {
             list = '<li><a> - none - </a></li>';

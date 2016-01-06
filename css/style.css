@@ -173,11 +173,13 @@
     font-weight: bold;
     text-shadow: 0 1px 0 #000;
     text-decoration: none;
-    text-indent: 20px;
     color: inherit;
 }
+.snap-drawer li > a.heading-txt {
+    text-indent: 20px;
+}
 
-.snap-drawer li > a:hover:not(.remove-prereq) {
+.snap-drawer li > a:hover {
     color: blueviolet;
 }
 
