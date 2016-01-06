@@ -183,6 +183,8 @@ function selectCallback(target) {
 }
 
 function leftSnapOpen() {
+    if (snapper.state().state !== 'closed') {return;}
+    
     $('#toolbar').detach().appendTo($('#outside-container'));
     snapper.open('left');
     arrowSpin('left');
@@ -211,6 +213,7 @@ function createNode() {
     activeState.dropNodes();
     activeState.addNodes(n.id);
     setDrawerContent(n);
+    leftSnapOpen();
     s.refresh();
     startLayout();
 }
@@ -348,7 +351,7 @@ function toggleEditMode() {
         startLayout();
     });
 
-    $('#create-node').on('click', function () {
+    $('#plus').on('click', function () {
         createNode();
     });
 

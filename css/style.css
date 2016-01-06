@@ -1,3 +1,12 @@
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+input[type=range] {
+    width: 160px;
+}
+
 #graph-container {
     top: 0;
     bottom: 0;
@@ -34,10 +43,6 @@
     display: block;
     right: 0;
     left: auto;
-}
-
-#wrench.active {
-    color: #ECAD88;
 }
 
 .search {
@@ -212,61 +217,6 @@
     float: right;
 }
 
-#control-pane {
-    top: 10px;
-    /*bottom: 10px;*/
-    right: 10px;
-    position: absolute;
-    width: 230px;
-    background-color: rgb(249, 247, 237);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-#control-pane > div {
-    margin: 10px;
-    overflow-x: auto;
-}
-
-#edit-toggle {
-    /*   margin-right: 20px; */
-}
-
-#toolbar span#new-node {
-    height: 30px;
-    display: none;
-}
-
-.line {
-    clear: both;
-    display: block;
-    width: 100%;
-    margin: 0;
-    padding: 12px 0 0 0;
-    border-bottom: 1px solid #aac789;
-    background: transparent;
-}
-
-.green {
-    color: #437356;
-}
-
-h2.underline {
-    color: #437356;
-    background: #f4f0e4;
-    margin: 0;
-    border-radius: 2px;
-    padding: 8px 12px;
-    font-weight: 700;
-}
-
-.hidden {
-    display: none;
-    visibility: hidden;
-}
-
-input[type=range] {
-    width: 160px;
-}
 
 .bottom-buttons {
     display: inline;
@@ -297,6 +247,7 @@ input[type=range] {
     background: #322222;
 }
 
+/* ----->> Toolbar <<----- */
 #toolbar {
     text-align: right;
     position: absolute;
@@ -311,19 +262,6 @@ input[type=range] {
     padding-right: 1em;
 }
 
-#toolbar h1 {
-    color: #fff;
-    font-size: 16px;
-    line-height: 22px;
-    text-align: center;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
-    position: absolute;
-    top: 0;
-    right: 44px;
-    left: 44px;
-    width: auto;
-    height: 44px;
-}
 
 #toolbar i:hover {
     color: darksalmon;
@@ -331,4 +269,13 @@ input[type=range] {
 
 #toolbar i:active {
     color: red;
+}
+
+#wrench.active {
+    color: #ECAD88;
+}
+
+#toolbar span#new-node {
+    height: 30px;
+    display: none;
 }
