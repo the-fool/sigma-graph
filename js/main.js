@@ -172,7 +172,8 @@ function selectCallback(target) {
     if (target.constructor === Array) {
         target = target[0];
     }
-    if (target.length === 0 && g.drawerNode !== null) {
+    if (target === undefined ||
+        target.length === 0 && g.drawerNode !== null) {
         leftSnapClose();
     } else {
         g.drawerNode = target;
