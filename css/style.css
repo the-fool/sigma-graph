@@ -152,12 +152,12 @@
     text-indent: 20px;
 }
 
-.snap-drawer li > a:hover {
+.snap-drawer li > a:hover:not(.none) {
     color: blueviolet;
 }
 
-#prereq-list {
-    color: #ccc;
+#node-info-list.edit-mode li {
+    color: #9E7E7E
 }
 
 #prereq-list > li:hover:not(.selected) {
@@ -170,9 +170,6 @@
 
 #prereq-list > li.selected > a {
     color: #AF5252;
-}
-#prereq-list.prereq-list-edit-mode .prereq-opt-edit-mode {
-    color: #9E7E7E
 }
 
 #prereq-list > li > a.remove {
