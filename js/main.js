@@ -342,7 +342,7 @@ function arrowSpin(leftOrRight) {
     $('#wrench').on('click', function () {
         editMode = !editMode;
         $('.snap-content').toggleClass('snap-content-edit-mode');
-        $(this).toggleClass('wrench-edit-mode');
+        $(this).toggleClass('active');
         if ($('.remove-prereq').slideToggle({
                 always: function () {
                     $('#prereq-list').toggleClass('prereq-list-edit-mode');
