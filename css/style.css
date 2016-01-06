@@ -175,17 +175,29 @@
     color: #9E7E7E
 }
 
-#prereq-list > li > a.remove-prereq {
+#prereq-list > li > a.remove {
     display: none;
+    float: right;
+    padding-right: 2em;
 }
+
+#prereq-list > li > a.remove > i:hover {
+    color: blueviolet;
+}
+
+#prereq-list > li > a.remove > i:active {
+    color: firebrick;
+}
+
 
 #node-edit-list {
     display: none;
 }
 
-#li-new-prereq {
+#new-prereq-li {
     display: none;
 }
+
 .node-edit-sublists {
     display: none;
 }
@@ -196,18 +208,6 @@
     float: right;
 }
 
-.remove-prereq {
-    float: right;
-    padding-right: 2em;
-}
-
-.remove-prereq > i:hover {
-    color: blueviolet;
-}
-
-.remove-prereq > i:active {
-    color: firebrick;
-}
 
 
 #control-pane {

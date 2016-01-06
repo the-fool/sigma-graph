@@ -227,7 +227,7 @@ function setDrawerContent(node) {
         });
         if (prereqs.length > 0) {
             prereqs.forEach(function (v) {
-                list += '<li data-id="' + v.id + '"><a href="#" class="heading-txt">' + v.name + '</a><a class="remove-prereq prereq-opt-edit-mode"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
+                list += '<li data-id="' + v.id + '"><a href="#" class="heading-txt">' + v.name + '</a><a class="remove prereq-opt-edit-mode"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
             });
         } else {
             list = '<li><a> - none - </a></li>';
@@ -243,7 +243,7 @@ function setDrawerContent(node) {
     $('.drawer-title').fadeOut(200, function () {
         $(this).text(txt);
     }).fadeIn(200, function () {
-        $('.remove-prereq i').off('click').click(clickRemovePrereq);
+        $('#prereq-list > li > a.remove > i').off('click').click(clickRemovePrereq);
         /* without the 'off', this binding will be duplicated, 
         /  due to how this function is called */
     });
@@ -343,7 +343,7 @@ function arrowSpin(leftOrRight) {
         editMode = !editMode;
         $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('active');
-        if ($('.remove-prereq').slideToggle({
+        if ($('#prereq-list > li > a.remove').slideToggle({
                 always: function () {
                     $('#prereq-list').toggleClass('prereq-list-edit-mode');
                 }
