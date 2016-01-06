@@ -40,19 +40,6 @@
     color: #ECAD88;
 }
 
-.toggler {
-    width: 80%;
-    background: rgba(255, 255, 255, 0.5);
-    margin: 0 auto;
-    position: relative;
-    top: 70px;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-
-/* Styles for expanding "Search" input in the "Expanding" demo */
 
 .search {
     padding-bottom: 10px;
@@ -131,6 +118,13 @@
     margin-bottom: 0;
 }
 
+.snap-drawer p {
+    opacity: 0.5;
+    padding: 15px;
+    font-size: 12px;
+}
+
+
 .snap-drawer ul {
     padding: 0;
     margin: 0;
@@ -141,13 +135,10 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.li-prereq-selected {
+.snap-drawer li:active {
     background: #322222;
 }
 
-.snap-drawer li.li-prereq-selected > a {
-    color: #AF5252;
-}
 
 .snap-drawer li > a {
     display: inline-block;
@@ -169,11 +160,22 @@
     color: #ccc;
 }
 
+#prereq-list > li:hover:not(.selected) {
+    background: #323333;
+}
+
+#prereq-list > li.selected {
+    background: #322222;
+}
+
+#prereq-list > li.selected > a {
+    color: #AF5252;
+}
 #prereq-list.prereq-list-edit-mode .prereq-opt-edit-mode {
     color: #9E7E7E
 }
 
-#prereq-list li > a.remove-prereq {
+#prereq-list > li > a.remove-prereq {
     display: none;
 }
 
@@ -207,19 +209,6 @@
     color: firebrick;
 }
 
-.snap-drawer li:hover:not(.li-prereq-selected) {
-    background: #323333;
-}
-
-.snap-drawer li:active {
-    background: #322222;
-}
-
-.snap-drawer p {
-    opacity: 0.5;
-    padding: 15px;
-    font-size: 12px;
-}
 
 #control-pane {
     top: 10px;

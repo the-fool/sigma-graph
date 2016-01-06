@@ -261,8 +261,8 @@ function clearDrawerContent() {
 function clickRemovePrereq() {
     var $i = $(this),
         $li = $i.parent().parent();
-    $li.toggleClass('li-prereq-selected');
-    if ($li.hasClass('li-prereq-selected') || $li.siblings('.li-prereq-selected').length > 0) {
+    $li.toggleClass('selected');
+    if ($li.hasClass('selected') || $li.siblings('.selected').length > 0) {
         $('#confirm-remove-prereq').show({
             duration: 400
         });
@@ -272,8 +272,8 @@ function clickRemovePrereq() {
 }
 
 function removePrereqs() {
-    var selected = $('#prereq-list li.li-prereq-selected');
-    selected.toggleClass('li-prereq-selected');
+    var selected = $('#prereq-list li.selected');
+    selected.toggleClass('selected');
     $('#confirm-remove-prereq').hide(400);
     selected.slideToggle({
         always: function () {
