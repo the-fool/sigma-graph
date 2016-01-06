@@ -147,8 +147,7 @@
         if (actives.length > 1) {
           a.addNodes(targets);
         } 
-        var activeNode = a.nodes()[0];
-        console.log(activeNode);  
+        var activeNode = a.nodes()[0]; 
         if(activeNode != null) {
           if(_nodeReference === activeNode.id) {
             if(newTargets.length) {
@@ -168,12 +167,13 @@
             }
           } else {
             _nodeReference = activeNode.id;
+            call_it(newTargets);
           }
         } else {
           call_it(newTargets);
         }
       }
-     // a.dropNodes();
+      if (exclusive) {a.dropNodes();}
       a.addNodes(newTargets);
       s.refresh({skipIndexation: true});
     };

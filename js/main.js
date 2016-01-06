@@ -169,11 +169,12 @@ function startLayout() {
 
 
 function selectCallback(target) {
-    target = target[0];
+    if (target.constructor === Array) {
+        target = target[0];
+    }
     if (target.length === 0 && g.drawerNode !== null) {
         leftSnapClose();
     } else {
-        console.log(target);
         g.drawerNode = target;
         setDrawerContent(s.graph.nodes(target));
         leftSnapOpen();
@@ -208,11 +209,13 @@ function leftSnapClose() {
 
 function createNode() {
     var n = new Node();
+    
     s.graph.addNode(n);
     activeState.dropNodes();
     activeState.addNodes(n.id);
-    setDrawerContent(n);
-    leftSnapOpen();
+
+    selectCallback(n.id);
+
     s.refresh();
     startLayout();
 }
@@ -344,7 +347,7 @@ function toggleEditMode() {
             layoutStyle = layoutEnum.Dagre;
             break;
         default:
-            console.log("something went wrong with the eye");
+            console.log("eye error");
         }
         startLayout();
     });
