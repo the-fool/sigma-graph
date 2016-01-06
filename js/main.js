@@ -227,12 +227,12 @@ function setDrawerContent(node) {
         });
         if (prereqs.length > 0) {
             prereqs.forEach(function (v) {
-                list += '<li data-id="' + v.id + '"><a href="#" class="heading-txt">' + v.name + '</a><a class="remove edit-opt"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
+                list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name + '</a><a class="remove edit-opt"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
             });
         } else {
             list = '<li><a class="none"> - none - </a></li>';
         }
-        list += '<li id="li-new-prereq" class="edit-opt"><a id="new-prereq" href="#"> - Create New Prereq - </a></li>';
+        list += '<li id="new-prereq" class="edit-opt"><a href="#"> - Create New Prereq - </a></li>';
         $('#prereq-list').html(list);
         $('#node-info-list').show();
     } else {
@@ -351,7 +351,7 @@ function arrowSpin(leftOrRight) {
             // guarantee that the class is toggled once --- this way of doing so is likely more efficient than searching the DOM multiple times
             $('#node-info-list').toggleClass('edit-mode');
         }
-        $('#li-new-prereq').slideToggle();
+        $('#new-prereq').slideToggle();
         $('#new-node').slideToggle();
         if (activeState.nodes().length === 0) {
             clearDrawerContent();

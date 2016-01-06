@@ -88,6 +88,9 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
+
+/* ----->> Side Drawer Globals <<----- */
+
 .snap-drawers {
     background: #323949;
 }
@@ -148,12 +151,18 @@
     text-decoration: none;
     color: inherit;
 }
-.snap-drawer li > a.heading-txt {
+.snap-drawer li > a.heading {
     text-indent: 20px;
 }
 
 .snap-drawer li > a:hover:not(.none) {
     color: blueviolet;
+}
+
+/* ----->> Node Info List <<----- */
+
+#node-info-list .edit-opt {
+    display: none;
 }
 
 #node-info-list.edit-mode li {
@@ -173,7 +182,6 @@
 }
 
 #prereq-list > li > a.remove {
-    display: none;
     float: right;
     padding-right: 2em;
 }
@@ -186,14 +194,10 @@
     color: firebrick;
 }
 
-
-#node-edit-list {
-    display: none;
+#prereq-list > #new-prereq {
+    text-align: center;
 }
 
-#new-prereq-li {
-    display: none;
-}
 
 .node-edit-sublists {
     display: none;
@@ -263,9 +267,6 @@ input[type=range] {
     width: 160px;
 }
 
-#right-main {
-    position: relative;
-}
 
 .bottom-buttons {
     display: inline;
