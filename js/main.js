@@ -174,25 +174,24 @@ function selectCallback(target) {
     } else {
         g.drawerNode = target[0];
         setDrawerContent(s.graph.nodes(target)[0]);
-        if (snapper.state().state === 'closed') {
-            leftSnapOpen();
-        } else {
-            arrowSpin('left');
-        }
+        leftSnapOpen();
     }
 }
 
 function leftSnapOpen() {
-    if (snapper.state().state !== 'closed') {return;}
+    if (snapper.state().state !== 'closed') {
+        arrowSpin(); 
+        return;
+    }
     
     $('#toolbar').detach().appendTo($('#outside-container'));
     snapper.open('left');
-    arrowSpin('left');
+    arrowSpin();
     snapper.disable();
 }
 
 function leftSnapClose() {
-    arrowSpin('left');
+    arrowSpin();
     snapper.enable();
     g.drawerNode = null;
     setTimeout(function () {
@@ -203,8 +202,6 @@ function leftSnapClose() {
     s.refresh({
         skipIndexation: true
     });
-
-    //$('#node-info-list').fadeOut();
 }
 
 function createNode() {
@@ -288,8 +285,8 @@ function removePrereqs() {
 }
 
 
-function arrowSpin(leftOrRight) {
-    var i = leftOrRight === 'left' ? $('#close-left i') : $('#close-right i');
+function arrowSpin() {
+    var i = $('#close-left i');
     if (i.hasClass('spun')) {
         i.transition({
             rotate: '0deg'
