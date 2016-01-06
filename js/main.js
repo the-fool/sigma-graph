@@ -201,7 +201,7 @@ function leftSnapClose() {
     s.refresh({
         skipIndexation: true
     });
-    
+
     //$('#node-info-list').fadeOut();
 }
 
@@ -221,11 +221,9 @@ function setDrawerContent(node) {
     }).fadeIn(200, function () {
         $('#prereq-list > li > a.remove > i').click(clickRemovePrereq);
     });
-    
+
     initDrawerContent();
     setPrereqs(node);
-
-    
 }
 
 function setPrereqs(node) {
@@ -239,7 +237,7 @@ function setPrereqs(node) {
     });
     if (prereqs.length > 0) {
         prereqs.forEach(function (v) {
-            list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name; 
+            list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name;
             list += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg"></i></a></li>';
         });
     } else {
@@ -270,14 +268,12 @@ function clickRemovePrereq() {
 
 function removePrereqs() {
     var selected = $('#prereq-list li.selected');
-    selected.toggleClass('selected');
     $('#confirm-remove-prereq').hide(400);
     selected.slideToggle({
         always: function () {
-            if ($('#prereq-list').children('li').length === 1) {
-                $('#prereq-list').prepend('<li><a> - none - </a></li>').hide().show({
-                    duration: 400
-                });
+            if ($('#prereq-list').children('li:not(.selected)').length === 1) {
+                $('#prereq-list').prepend('<li style="display:none"><a> - none - </a></li>');
+                $('#prereq-list>li:first-child').slideToggle();
             }
             $(this).remove();
         }
@@ -286,25 +282,8 @@ function removePrereqs() {
         s.graph.dropEdges([$(this).data('id'), g.drawerNode].join());
     });
     startLayout();
-
-
 }
 
-/*function rightSnapClose() {
-    arrowSpin('right');
-    snapper.enable();
-    $('.drawer-title').fadeOut(200);
-    setTimeout(function () {
-        $('#toolbar').detach().appendTo($('#container'));
-        snapper.close('right');
-    }, 300);
-
-    activeState.dropNodes();
-    clearDrawerContent();
-    s.refresh({
-        skipIndexation: true
-    });
-}*/
 
 function arrowSpin(leftOrRight) {
     var i = leftOrRight === 'left' ? $('#close-left i') : $('#close-right i');
@@ -319,6 +298,19 @@ function arrowSpin(leftOrRight) {
         });
         i.addClass('spun');
     }
+}
+
+function toggleEditMode() {
+    editMode = !editMode;
+    $('#container').toggleClass('edit-mode');
+
+    $.when($('#prereq-list>li>a.remove').slideToggle(),
+        $('#new-prereq').slideToggle(),
+        $('#new-node').slideToggle()
+    ).then(function () {
+        console.log("edit toggle");
+        $('#node-info-list').toggleClass('edit-mode');
+    });
 }
 
 /*
@@ -337,25 +329,8 @@ function arrowSpin(leftOrRight) {
 
 
     $('#wrench').on('click', function () {
-        editMode = !editMode;
-        $('.snap-content').toggleClass('snap-content-edit-mode');
         $(this).toggleClass('active');
-        if ($('#prereq-list > li > a.remove').slideToggle({
-                always: function () {
-                    $('#node-info-list').toggleClass('edit-mode');
-                }
-            }).length === 0) {
-            // guarantee that the class is toggled once --- this way of doing so is likely more efficient than searching the DOM multiple times
-            $('#node-info-list').toggleClass('edit-mode');
-        }
-        $('#new-prereq').slideToggle();
-        $('#new-node').slideToggle();
-        /*if (activeState.nodes().length === 0) {
-            clearDrawerContent();
-        }
-        /*if (snapper.state().state === 'closed' && $(this).hasClass('wrench-edit-mode')) {
-            leftSnapOpen();
-        } */
+        toggleEditMode();
     });
 
 

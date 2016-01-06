@@ -6,7 +6,7 @@
     position: absolute;
 }
 
-.snap-content {
+#container.snap-content {
     background: #BFC7D8;
     background: -webkit-radial-gradient(#DBD9DE, #B1B0B1, #78DAD5);
     /* Safari */
@@ -18,7 +18,7 @@
     /* Standard syntax */
 }
 
-.snap-content-edit-mode {
+#container.edit-mode {
     background: #475050;
     background: -webkit-radial-gradient(#A8A3B1, #A099A0, #475050);
     /* Safari */
