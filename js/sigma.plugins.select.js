@@ -124,6 +124,7 @@
       var targets = event.data.node.map(function(n) {
         return n.id;
       });
+
       var actives = a.nodes().map(function(n) {
         return n.id;
       });
@@ -131,24 +132,23 @@
       
       /*
       ** ADDED MOD -- limits the quantity of selected nodes to 1
-      **
+      ** This check kicks in when two overlapping nodes (e.g.) get clicked at once
       */
-      if (newTargets.length > 1 && exclusive) {
-          newTargets = newTargets[0];
+      if (exclusive) {
+          newTargets = newTargets.slice(0,1);
       }
       a.dropEdges();
 
       if (_spacebar || s.secondaryMode) {
         var existingTargets = difference(targets, newTargets);
         a.dropNodes(existingTargets);
-      }
-                 
+      } 
       else {
         if (actives.length > 1) {
           a.addNodes(targets);
-        }
+        } 
         var activeNode = a.nodes()[0];
-          
+        console.log(activeNode);  
         if(activeNode != null) {
           if(_nodeReference === activeNode.id) {
             if(newTargets.length) {
@@ -172,10 +172,10 @@
         } else {
           call_it(newTargets);
         }
-      }    
+      }
+     // a.dropNodes();
       a.addNodes(newTargets);
       s.refresh({skipIndexation: true});
-     
     };
 
     /**

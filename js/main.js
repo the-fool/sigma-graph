@@ -169,11 +169,13 @@ function startLayout() {
 
 
 function selectCallback(target) {
+    target = target[0];
     if (target.length === 0 && g.drawerNode !== null) {
         leftSnapClose();
     } else {
-        g.drawerNode = target[0];
-        setDrawerContent(s.graph.nodes(target)[0]);
+        console.log(target);
+        g.drawerNode = target;
+        setDrawerContent(s.graph.nodes(target));
         leftSnapOpen();
     }
 }
@@ -308,7 +310,6 @@ function toggleEditMode() {
         $('#new-prereq').slideToggle(),
         $('#new-node').slideToggle()
     ).then(function () {
-        console.log("edit toggle");
         $('#node-info-list').toggleClass('edit-mode');
     });
 }
