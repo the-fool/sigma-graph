@@ -160,9 +160,14 @@
 
 /* ----->> Node Info List <<----- */
 
-#node-info-list .edit-opt {
+#node-info-list:not(.edit-mode) .edit-opt {
     display: none;
 }
+
+#node-info-list > ul.sub {
+    display: none;
+}
+
 
 #node-info-list.edit-mode li {
     color: #9E7E7E

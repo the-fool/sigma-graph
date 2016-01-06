@@ -216,7 +216,6 @@ function setDrawerContent(node) {
     var prereqs = [],
         txt = '',
         list = '';
-    $('.node-info-sublists').hide();
     $('.sublist-confirm').hide();
     if (typeof node !== 'undefined') {
         txt = node.name;
@@ -234,7 +233,7 @@ function setDrawerContent(node) {
         }
         list += '<li id="new-prereq" class="edit-opt"><a href="#"> - Create New Prereq - </a></li>';
         $('#prereq-list').html(list);
-        $('#node-info-list').show();
+        //$('#node-info-list').show();
     } else {
         $('#node-info-list').hide({
             duration: 400
@@ -253,7 +252,7 @@ function clearDrawerContent() {
     if (editMode) {
         $('.drawer-title').text('Edit mode').fadeIn(200);
     }
-    $('.node-info-sublists').hide();
+    $('#node-info-list>ul.sub').hide();
     $('.sublist-confirm').hide();
     $('#node-info-list').hide();
 }
@@ -381,7 +380,7 @@ function arrowSpin(leftOrRight) {
     });
 
     $('#prereqs').on('click', function () {
-        $('.node-info-sublists:not(#prereq-list)').hide();
+        $('#node-info-list>ul.sub:not(#prereq-list)').hide();
         $('#prereq-list').toggle({
             duration: 300
         });
