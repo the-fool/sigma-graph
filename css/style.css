@@ -40,7 +40,6 @@
     color: #ECAD88;
 }
 
-
 .search {
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -127,7 +126,6 @@
     font-size: 12px;
 }
 
-
 .snap-drawer ul {
     padding: 0;
     margin: 0;
@@ -142,7 +140,6 @@
     background: #322222;
 }
 
-
 .snap-drawer li > a {
     display: inline-block;
     padding: 15px;
@@ -151,6 +148,7 @@
     text-decoration: none;
     color: inherit;
 }
+
 .snap-drawer li > a.heading {
     text-indent: 20px;
 }
@@ -158,6 +156,7 @@
 .snap-drawer li > a:hover:not(.none) {
     color: blueviolet;
 }
+
 
 /* ----->> Node Info List <<----- */
 
@@ -198,7 +197,6 @@
     text-align: center;
 }
 
-
 .node-edit-sublists {
     display: none;
 }
@@ -208,8 +206,6 @@
     color: chartreuse;
     float: right;
 }
-
-
 
 #control-pane {
     top: 10px;
@@ -266,7 +262,6 @@ h2.underline {
 input[type=range] {
     width: 160px;
 }
-
 
 .bottom-buttons {
     display: inline;
