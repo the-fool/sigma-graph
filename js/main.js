@@ -71,7 +71,9 @@ var Node = (function () {
     for (i = 0; i < E; i++) {
         var source = 'n' + (Math.random() * N | 0);
         var target = 'n' + (Math.random() * N | 0);
-        if ($.inArray([source, target].join(), g.edges.map(function(obj) {return obj.id;})) !== -1) {
+        if ($.inArray([source, target].join(), g.edges.map(function (obj) {
+                return obj.id;
+            })) !== -1) {
             i--;
             continue;
         }
@@ -199,7 +201,8 @@ function leftSnapClose() {
     s.refresh({
         skipIndexation: true
     });
-    $('#drawer-title').fadeOut();
+    
+    //$('#node-info-list').fadeOut();
 }
 
 function createNode() {
@@ -213,49 +216,44 @@ function createNode() {
 }
 
 function setDrawerContent(node) {
-    var prereqs = [],
-        txt = '',
-        list = '';
-    $('.sublist-confirm').hide();
-    if (typeof node !== 'undefined') {
-        txt = node.name;
-        s.graph.edges().forEach(function (v, i, a) {
-            if (v.target === node.id) {
-                prereqs.push(s.graph.nodes(v.source));
-            }
-        });
-        if (prereqs.length > 0) {
-            prereqs.forEach(function (v) {
-                list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name + '</a><a class="remove edit-opt"><i data-id="' + v.id + '" class="fa fa-remove fa-lg"></i></a></li>';
-            });
-        } else {
-            list = '<li><a class="none"> - none - </a></li>';
-        }
-        list += '<li id="new-prereq" class="edit-opt"><a href="#"> - Create New Prereq - </a></li>';
-        $('#prereq-list').html(list);
-        //$('#node-info-list').show();
-    } else {
-        $('#node-info-list').hide({
-            duration: 400
-        });
-    }
-    $('.drawer-title').fadeOut(200, function () {
-        $(this).text(txt);
+    $('#left-main .drawer-title').fadeOut(200, function () {
+        $(this).text(node.name);
     }).fadeIn(200, function () {
-        $('#prereq-list > li > a.remove > i').off('click').click(clickRemovePrereq);
-        /* without the 'off', this binding will be duplicated, 
-        /  due to how this function is called */
+        $('#prereq-list > li > a.remove > i').click(clickRemovePrereq);
     });
+    
+    initDrawerContent();
+    setPrereqs(node);
+
+    
 }
 
-function clearDrawerContent() {
-    if (editMode) {
-        $('.drawer-title').text('Edit mode').fadeIn(200);
+function setPrereqs(node) {
+    var prereqs = [],
+        list = '';
+
+    s.graph.edges().forEach(function (v, i, a) {
+        if (v.target === node.id) {
+            prereqs.push(s.graph.nodes(v.source));
+        }
+    });
+    if (prereqs.length > 0) {
+        prereqs.forEach(function (v) {
+            list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name; 
+            list += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg"></i></a></li>';
+        });
+    } else {
+        list = '<li><a class="none"> - none - </a></li>';
     }
-    $('#node-info-list>ul.sub').hide();
-    $('.sublist-confirm').hide();
-    $('#node-info-list').hide();
+    list += '<li id="new-prereq" class="edit-opt"><a href="#"> - Create New Prereq - </a></li>';
+    $('#prereq-list').html(list);
 }
+
+function initDrawerContent() {
+    $('.sublist-confirm').hide(200);
+    $('#node-info-list>ul.sub').hide(200);
+}
+
 
 function clickRemovePrereq() {
     var $i = $(this),
@@ -281,14 +279,14 @@ function removePrereqs() {
                     duration: 400
                 });
             }
-        $(this).remove();
+            $(this).remove();
         }
     });
     selected.each(function () {
         s.graph.dropEdges([$(this).data('id'), g.drawerNode].join());
     });
     startLayout();
-    
+
 
 }
 
@@ -352,7 +350,7 @@ function arrowSpin(leftOrRight) {
         }
         $('#new-prereq').slideToggle();
         $('#new-node').slideToggle();
-        if (activeState.nodes().length === 0) {
+        /*if (activeState.nodes().length === 0) {
             clearDrawerContent();
         }
         /*if (snapper.state().state === 'closed' && $(this).hasClass('wrench-edit-mode')) {
