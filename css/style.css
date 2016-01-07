@@ -165,8 +165,27 @@ input[type=range] {
 
 /* ----->> Node Info List <<----- */
 
+#node-info-list a.sublist-title {
+    text-decoration: none;
+}
+
+#node-info-list a.sublist-title {
+  border-bottom: 2px solid rgba(204, 204, 204, 0);
+  -webkit-transition: border 500ms ease;
+  -moz-transition: border 500ms ease;
+  -ms-transition: border 500ms ease;
+  -o-transition: border 500ms ease;
+  transition: border 500ms ease; 
+}
+
+
+#node-info-list a.sublist-title:hover { 
+    border-bottom: 2px solid rgba(192, 192, 192, 1);
+    cursor:pointer;
+} 
 #node-info-list:not(.edit-mode) .edit-opt {
     display: none;
+    
 }
 
 #node-info-list > ul.sub {
