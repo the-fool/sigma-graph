@@ -97,7 +97,7 @@ var s = new sigma({
         type: 'canvas'
     },
     settings: {
-        secondaryActiveColor: 'rgba(12,56,230,.3)',
+        secondaryActiveColor: 'rgba(114,251,113,.3)',
         borderSize: 1,
         outerBorderSize: 1,
         defaultNodeBorderColor: 'rgba(255,215,0,.1)',
@@ -235,7 +235,7 @@ function setDrawerContent(node) {
 function setPrereqs(node) {
     var prereqs = [],
         list = '';
-
+    $('#prereq-list li:not(#new-prereq)').remove();
     s.graph.edges().forEach(function (v, i, a) {
         if (v.target === node.id) {
             prereqs.push(s.graph.nodes(v.source));
@@ -244,13 +244,13 @@ function setPrereqs(node) {
     if (prereqs.length > 0) {
         prereqs.forEach(function (v) {
             list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name;
-            list += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg"></i></a></li>';
+            list += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg">';
+            list += '</i></a></li>';
         });
     } else {
         list = '<li><a class="none"> - none - </a></li>';
     }
-    list += '<li id="new-prereq" class="edit-opt"><a href="#"> - Create New Prereq - </a></li>';
-    $('#prereq-list').html(list);
+    $('#prereq-list').prepend(list);
 }
 
 function initDrawerContent() {
@@ -364,7 +364,7 @@ function toggleEditMode() {
         });
     });
 
-    $('#add-prereqs').on('click', function () {
+    $('#new-prereq').on('click', function () {
         console.log(s);
         s.secondaryMode = !s.secondaryMode;
     });

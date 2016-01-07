@@ -173,7 +173,7 @@
           call_it(newTargets);
         }
       }
-      if (exclusive) {a.dropNodes();}
+      if (exclusive && !s.secondaryMode) {a.dropNodes();}
       a.addNodes(newTargets);
       s.refresh({skipIndexation: true});
     };
