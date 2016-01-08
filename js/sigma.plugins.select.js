@@ -141,6 +141,10 @@
             a.dropEdges();
 
             if (_spacebar || s.secondaryMode) {
+                // in secondary mode, we must not deselect the main node
+                if ($.inArray(g.drawerNode, targets) !== -1) {
+                    return;
+                }
                 var existingTargets = difference(targets, newTargets);
                 a.dropNodes(existingTargets);
             } else {

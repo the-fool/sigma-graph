@@ -241,6 +241,7 @@ function leftSnapClose() {
     s.refresh({
         skipIndexation: true
     });
+    initDrawerContent();
 }
 
 function createNode() {
