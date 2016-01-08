@@ -184,9 +184,9 @@ function selectCallback(target) {
     } else { // secondary mode == addition of new prereqs
         handleTentativePrereq(target);
         if (activeState.nodes().length > 1) {
-            $('#new-prereq-links').show(300);
+            $('#prereq-confirm').show(300);
         } else {
-            $('#new-prereq-links').hide(300);
+            $('#prereq-confirm').hide(300);
         }
     }
 }
@@ -204,9 +204,8 @@ function handleTentativePrereq(nodeID) {
             }
             //jQuery's .each() will terminate prematurely if given an array of undefined's
             if ($.inArray($(this).data('id'), tentatives) === -1) {
-                console.log($(this));
-                $.when($(this).slideUp()).then(function () {
-                    $(this).remove;
+                $.when($(this).slideUp()).then(function () {    
+                    $(this).remove();
                 });
                 return false;
             }
@@ -217,9 +216,6 @@ function handleTentativePrereq(nodeID) {
     }
 }
 
-function removeTentativePrereq() {
-
-}
 
 function leftSnapOpen() {
     if (snapper.state().state !== 'closed') {
@@ -310,17 +306,17 @@ function clickRemovePrereq() {
         $li = $i.parent().parent();
     $li.toggleClass('selected');
     if ($li.hasClass('selected') || $li.siblings('.selected').length > 0) {
-        $('#confirm-remove-prereq').show({
+        $('#prereq-confirm').show({
             duration: 400
         });
     } else {
-        $('#confirm-remove-prereq').hide(400);
+        $('#prereq-confirm').hide(400);
     }
 }
 
 function removePrereqs() {
     var selected = $('#prereq-list li.selected');
-    $('#confirm-remove-prereq').hide(400);
+    $('#prereq-confirm').hide(400);
     selected.slideToggle({
         always: function () {
             if ($('#prereq-list').children('li:not(.selected)').length === 1) {
@@ -425,8 +421,12 @@ function toggleAddNewPrereqMode() {
         toggleAddNewPrereqMode();
     });
 
-    $('#confirm-remove-prereq').on('click', function () {
-        removePrereqs();
+    $('#prereq-confirm').on('click', function () {
+        if (s.secondaryMode) {
+            addPrereqs();
+        } else {
+            removePrereqs();
+        }
     })
 })();
 
