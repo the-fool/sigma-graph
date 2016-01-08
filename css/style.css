@@ -178,7 +178,6 @@ input[type=range] {
   transition: border 500ms ease; 
 }
 
-
 #node-info-list a.sublist-title:hover { 
     border-bottom: 2px solid rgba(192, 192, 192, 1);
     cursor:pointer;
@@ -194,7 +193,14 @@ input[type=range] {
 
 
 #node-info-list.edit-mode li {
-    color: #9E7E7E
+    color: #cca;
+}
+
+#new-prereq.in-situ {
+    background: #222233;
+}
+#new-prereq.in-situ > a {
+     color: #ccc;
 }
 
 #prereq-list > li:hover:not(.selected) {

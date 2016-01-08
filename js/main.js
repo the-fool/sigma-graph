@@ -97,7 +97,7 @@ var s = new sigma({
         type: 'canvas'
     },
     settings: {
-        secondaryActiveColor: 'rgba(114,251,113,.3)',
+        secondaryActiveColor: 'rgba(40,251,40,.5)',
         borderSize: 1,
         outerBorderSize: 1,
         defaultNodeBorderColor: 'rgba(255,215,0,.1)',
@@ -184,10 +184,10 @@ function selectCallback(target) {
 
 function leftSnapOpen() {
     if (snapper.state().state !== 'closed') {
-        arrowSpin(); 
+        arrowSpin();
         return;
     }
-    
+
     $('#toolbar').detach().appendTo($('#outside-container'));
     snapper.open('left');
     arrowSpin();
@@ -210,7 +210,7 @@ function leftSnapClose() {
 
 function createNode() {
     var n = new Node();
-    
+
     s.graph.addNode(n);
     activeState.dropNodes();
     activeState.addNodes(n.id);
@@ -318,6 +318,16 @@ function toggleEditMode() {
     });
 }
 
+function toggleAddNewPrereqMode() {
+    s.secondaryMode = !s.secondaryMode;
+    var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
+    $.when($('#new-prereq>a').fadeOut(200, function () {
+        $(this).text(txt);
+    }).fadeIn(200)).then(function () {
+        $(this).parent().toggleClass('in-situ');
+    });
+
+}
 /*
  ** All static event bindings
  **
@@ -365,8 +375,7 @@ function toggleEditMode() {
     });
 
     $('#new-prereq').on('click', function () {
-        console.log(s);
-        s.secondaryMode = !s.secondaryMode;
+        toggleAddNewPrereqMode();
     });
 
     $('#confirm-remove-prereq').on('click', function () {
