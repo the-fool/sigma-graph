@@ -153,7 +153,6 @@
                         if (newTargets.length) {
                             a.dropNodes();
                             _nodeReference = null;
-                            //call_it(newTargets);
                         } else {
                             setTimeout(function () {
                                 if (!_doubleClickingNodes) {
@@ -162,24 +161,18 @@
                                     s.refresh({
                                         skipIndexation: true
                                     });
-
-                                    //      call_it(newTargets);
                                 }
                             }, s.settings('doubleClickTimeout'));
                         }
                     } else {
                         _nodeReference = activeNode.id;
-                        // call_it(newTargets);
                     }
-                } else {
-                    //call_it(newTargets);
-                }
+                } 
             }
             if (!_doubleClickingNodes) {
                 if (exclusive && !s.secondaryMode) {
                     a.dropNodes();
                 }
-
                 a.addNodes(newTargets);
                 s.refresh({
                     skipIndexation: true
