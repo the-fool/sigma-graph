@@ -223,7 +223,8 @@ input[type=range] {
 }
 
 #prereq-list > li.deactivated, #prereq-list > li.deactivated:hover {
-    background: #57595A;
+    transition: background-color 0.5s ease;
+    background-color: #57595A;
 }
  
 
@@ -241,7 +242,8 @@ input[type=range] {
 }
 
 #prereq-list > li.tentative, #prereq-list >li.tentative:hover {
-    background: #65B350;
+    transition: background-color 0.5s ease;
+    background-color: #65B350;
 }
 
 #prereq-list > li.tentative > a.remove {

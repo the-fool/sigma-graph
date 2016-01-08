@@ -204,7 +204,7 @@ function handleTentativePrereq(nodeID) {
             }
             //jQuery's .each() will terminate prematurely if given an array of undefined's
             if ($.inArray($(this).data('id'), tentatives) === -1) {
-                $.when($(this).slideUp()).then(function () {    
+                $.when($(this).slideUp()).then(function () {
                     $(this).remove();
                 });
                 return false;
@@ -333,6 +333,19 @@ function removePrereqs() {
     startLayout();
 }
 
+function addPrereqs() {
+    var selected = $('#prereq-list li.tentative');
+    // set the elements to display: none
+    selected.find('a.remove').hide();
+    $('#prereq-confirm').hide(400);
+    selected.css('background-color', '#323949');
+    $('#prereq-list li.deactivated').css('background-color', '#323949');
+    setTimeout(function() {
+        selected.removeClass('tentative');
+        //selected.find('a.remove').slideDown();
+        toggleAddNewPrereqMode();
+    }, 500); // wait for bacground-color transition
+}
 
 function arrowSpin() {
     var i = $('#close-left i');
