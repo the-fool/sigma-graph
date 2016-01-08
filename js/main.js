@@ -169,18 +169,23 @@ function startLayout() {
 
 
 function selectCallback(target) {
-    if (target.constructor === Array) {
-        target = target[0];
-    }
-    if (target === undefined ||
-        target.length === 0 && g.drawerNode !== null) {
-        leftSnapClose();
+    if (!s.secondaryMode) {
+        if (target.constructor === Array) {
+            target = target[0];
+        }
+        if (target === undefined ||
+            target.length === 0 && g.drawerNode !== null) {
+            leftSnapClose();
+        } else {
+            g.drawerNode = target;
+            setDrawerContent(s.graph.nodes(target));
+            leftSnapOpen();
+        }
     } else {
-        g.drawerNode = target;
-        setDrawerContent(s.graph.nodes(target));
-        leftSnapOpen();
+        console.log('second');
     }
 }
+
 
 function leftSnapOpen() {
     if (snapper.state().state !== 'closed') {

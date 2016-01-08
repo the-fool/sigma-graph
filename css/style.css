@@ -196,13 +196,16 @@ input[type=range] {
     color: #cca;
 }
 
+/*----->> New Prererq <<-----*/
 #new-prereq.in-situ {
     background: #222233;
 }
 #new-prereq.in-situ > a {
      color: #ccc;
 }
-
+#new-prereq > #new-prereq-links {
+    display: none;
+}
 #prereq-list > li:hover:not(.selected) {
     background: #323333;
 }
