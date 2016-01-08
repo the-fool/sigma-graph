@@ -169,10 +169,10 @@ function startLayout() {
 
 
 function selectCallback(target) {
+    if (target.constructor === Array) {
+        target = target[0];
+    }
     if (!s.secondaryMode) {
-        if (target.constructor === Array) {
-            target = target[0];
-        }
         if (target === undefined ||
             target.length === 0 && g.drawerNode !== null) {
             leftSnapClose();
@@ -181,11 +181,29 @@ function selectCallback(target) {
             setDrawerContent(s.graph.nodes(target));
             leftSnapOpen();
         }
-    } else {
-        console.log('second');
+    } else { // secondary mode == addition of new prereqs
+        handleTentativePrereq(target);
+    
+        if (activeState.nodes().length > 1) {
+            $('#new-prereq-links').show(300);
+        } else {
+            $('#new-prereq-links').hide(300);
+        }
     }
 }
 
+function handleTentativePrereq(nodeID) {
+    if (nodeID === undefined) {
+        
+    } else {
+     $(genPrereqLi(s.graph.nodes(nodeID), 'tentative')).prependTo($('#prereq-list'))
+     .hide().show(300);
+    }
+}
+
+function removeTentativePrereq() {
+    
+}
 
 function leftSnapOpen() {
     if (snapper.state().state !== 'closed') {
@@ -248,9 +266,7 @@ function setPrereqs(node) {
     });
     if (prereqs.length > 0) {
         prereqs.forEach(function (v) {
-            list += '<li data-id="' + v.id + '"><a href="#" class="heading">' + v.name;
-            list += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg">';
-            list += '</i></a></li>';
+            list = genPrereqLi(v);
         });
     } else {
         list = '<li><a class="none"> - none - </a></li>';
@@ -263,6 +279,15 @@ function initDrawerContent() {
     $('#node-info-list>ul.sub').hide(200);
 }
 
+function genPrereqLi(node, cls) {
+    var ret = '',
+        c = cls == undefined ? '""' : cls;
+    ret += '<li data-id="' + node.id + '" class="' + c + '">'
+    ret += '<a href="#" class="heading">' + node.name;
+    ret += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg">';
+    ret += '</i></a></li>';
+    return ret;
+}
 
 function clickRemovePrereq() {
     var $i = $(this),

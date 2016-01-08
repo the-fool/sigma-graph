@@ -183,8 +183,7 @@ input[type=range] {
     cursor:pointer;
 } 
 #node-info-list:not(.edit-mode) .edit-opt {
-    display: none;
-    
+    display: none; 
 }
 
 #node-info-list > ul.sub {
@@ -230,8 +229,10 @@ input[type=range] {
 #prereq-list > li > a.remove > i:active {
     color: firebrick;
 }
-
-#prereq-list > #new-prereq {
+#prereq-list > li.tentative > a.remove {
+    display: none;
+}
+#new-prereq {
     text-align: center;
 }
 
