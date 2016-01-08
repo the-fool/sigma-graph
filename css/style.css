@@ -205,6 +205,11 @@ input[type=range] {
 #new-prereq > #new-prereq-links {
     display: none;
 }
+
+#new-prereq {
+    text-align: center;
+}
+
 #prereq-list > li:hover:not(.selected) {
     background: #323333;
 }
@@ -217,6 +222,13 @@ input[type=range] {
     color: #AF5252;
 }
 
+#prereq-list > li.deactivated, #prereq-list > li.deactivated:hover {
+    background: #57595A;
+}
+ 
+#prereq-list > li.deactivated > a.remove {
+    display: none;
+}
 #prereq-list > li > a.remove {
     float: right;
     padding-right: 2em;
@@ -229,11 +241,12 @@ input[type=range] {
 #prereq-list > li > a.remove > i:active {
     color: firebrick;
 }
+#prereq-list > li.tentative, #prereq-list >li.tentative:hover {
+    background: #65B350;
+}
+
 #prereq-list > li.tentative > a.remove {
     display: none;
-}
-#new-prereq {
-    text-align: center;
 }
 
 .node-edit-sublists {

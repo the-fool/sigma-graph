@@ -266,7 +266,7 @@ function setPrereqs(node) {
     });
     if (prereqs.length > 0) {
         prereqs.forEach(function (v) {
-            list = genPrereqLi(v);
+            list += genPrereqLi(v);
         });
     } else {
         list = '<li><a class="none"> - none - </a></li>';
@@ -354,7 +354,8 @@ function toggleAddNewPrereqMode() {
     $.when($('#new-prereq>a').fadeOut(200, function () {
         $(this).text(txt);
     }).fadeIn(200)).then(function () {
-        $(this).parent().toggleClass('in-situ');
+        $(this).parent().toggleClass('in-situ')
+            .siblings('li').toggleClass('deactivated').find('a.remove').slideToggle();
     });
 
 }
