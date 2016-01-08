@@ -226,9 +226,7 @@ input[type=range] {
     background: #57595A;
 }
  
-/*#prereq-list > li.deactivated > a.remove {
-    display: none;
-}*/
+
 #prereq-list > li > a.remove {
     float: right;
     padding-right: 2em;
