@@ -183,7 +183,6 @@ function selectCallback(target) {
         }
     } else { // secondary mode == addition of new prereqs
         handleTentativePrereq(target);
-    
         if (activeState.nodes().length > 1) {
             $('#new-prereq-links').show(300);
         } else {
@@ -194,15 +193,32 @@ function selectCallback(target) {
 
 function handleTentativePrereq(nodeID) {
     if (nodeID === undefined) {
-        
+        var tentatives = activeState.nodes().map(function (e) {
+            if (e.id !== g.drawerNode) {
+                return e.id;
+            }
+        });
+        $('#prereq-list>li.tentative').each(function () {
+            if (tentatives[0] === undefined) {
+                tentatives[0] = '';
+            }
+            //jQuery's .each() will terminate prematurely if given an array of undefined's
+            if ($.inArray($(this).data('id'), tentatives) === -1) {
+                console.log($(this));
+                $.when($(this).slideUp()).then(function () {
+                    $(this).remove;
+                });
+                return false;
+            }
+        });
     } else {
-     $(genPrereqLi(s.graph.nodes(nodeID), 'tentative')).prependTo($('#prereq-list'))
-     .hide().show(300);
+        $(genPrereqLi(s.graph.nodes(nodeID), 'tentative')).prependTo($('#prereq-list'))
+            .hide().show(300);
     }
 }
 
 function removeTentativePrereq() {
-    
+
 }
 
 function leftSnapOpen() {

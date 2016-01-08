@@ -241,6 +241,7 @@ input[type=range] {
 #prereq-list > li > a.remove > i:active {
     color: firebrick;
 }
+
 #prereq-list > li.tentative, #prereq-list >li.tentative:hover {
     background: #65B350;
 }
