@@ -341,12 +341,43 @@ function addPrereqs() {
     selected.css('background-color', '#323949');
     $('#prereq-list li.deactivated').css('background-color', '#323949');
     setTimeout(function() {
-        selected.removeClass('tentative');
-        //selected.find('a.remove').slideDown();
+        // wait for bacground-color transition
         toggleAddNewPrereqMode();
-    }, 500); // wait for bacground-color transition
+        $('#prereq-list li.deactivated').removeAttr('style');
+        selected.removeClass('tentative').removeAttr('style');
+        var newIDs = selected.map(function() {
+           return $(this).data('id'); 
+        }).get();
+        addEdges(newIDs, g.drawerNode);
+        clearSecondarySelections();
+        s.refresh({
+            skipIndexation: true
+        });
+        startLayout();
+    }, 500); 
 }
 
+function addEdges(source, target) {
+    if (source.constructor == Array &&
+        target.constructor != Array) {
+        source.forEach(function(e) {
+            s.graph.addEdge({
+                source: e,
+                target: target,
+                id: [e,target].join(),
+                type: (source === target) ? 'curvedArrow' : 'arrow',
+                size: .5
+            });
+        });
+    }
+}
+function clearSecondarySelections() {
+    activeState.nodes().forEach(function(e) {
+       if (e.id !== g.drawerNode) {
+           activeState.dropNodes(e.id);
+       } 
+    });
+}
 function arrowSpin() {
     var i = $('#close-left i');
     if (i.hasClass('spun')) {
@@ -377,11 +408,15 @@ function toggleEditMode() {
 function toggleAddNewPrereqMode() {
     s.secondaryMode = !s.secondaryMode;
     var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
+    // must get a synchronized reference to non-tentative li's before the async fadeOut()
+    var toToggle = $('#prereq-list > li').not('.tentative');
     $.when($('#new-prereq>a').fadeOut(200, function () {
         $(this).text(txt);
     }).fadeIn(200)).then(function () {
-        $(this).parent().toggleClass('in-situ')
-            .siblings('li').toggleClass('deactivated').find('a.remove').slideToggle();
+        var $li = $(this).parent();
+        $li.toggleClass('in-situ');
+        toToggle.toggleClass('deactivated');
+        $li.siblings().find('a.remove').slideToggle();
     });
 
 }
