@@ -340,10 +340,11 @@ function addPrereqs() {
     $('#prereq-list li.deactivated').css('background-color', '#323949');
     setTimeout(function() {
         // wait for bacground-color transition
-        toggleAddNewPrereqMode();
+        
         // get rid of the custom styling up above, after transition
         $('#prereq-list li.deactivated').removeAttr('style');
         selected.removeClass('tentative').removeAttr('style');
+        toggleAddNewPrereqMode();
         var newIDs = selected.map(function() {
            return $(this).data('id'); 
         }).get();
@@ -355,7 +356,22 @@ function addPrereqs() {
         startLayout();
     }, 500); 
 }
-
+function toggleAddNewPrereqMode() {
+    s.secondaryMode = !s.secondaryMode;
+    var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
+    // must get a synchronized reference to non-tentative li's before the async fadeOut()
+    $.when($('#new-prereq>a').fadeOut(200, function () {
+        $(this).text(txt);
+    }).fadeIn(200)).then(function () {
+        var $lis = $(this).parent().toggleClass('in-situ').siblings();
+        if (s.secondaryMode) {
+            $lis.addClass('deactivated');
+        } else {
+            $lis.removeClass('deactivated');
+        }
+        $lis.find('a.remove').slideToggle();
+    });
+}
 function addEdges(source, target) {
     if (source.constructor == Array &&
         target.constructor != Array) {
@@ -404,21 +420,7 @@ function toggleEditMode() {
     });
 }
 
-function toggleAddNewPrereqMode() {
-    s.secondaryMode = !s.secondaryMode;
-    var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
-    // must get a synchronized reference to non-tentative li's before the async fadeOut()
-    var toToggle = $('#prereq-list > li').not('.tentative');
-    $.when($('#new-prereq>a').fadeOut(200, function () {
-        $(this).text(txt);
-    }).fadeIn(200)).then(function () {
-        var $li = $(this).parent();
-        $li.toggleClass('in-situ');
-        toToggle.toggleClass('deactivated');
-        $li.siblings().find('a.remove').slideToggle();
-    });
 
-}
 /*
  ** All static event bindings
  **
