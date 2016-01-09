@@ -233,6 +233,7 @@ function leftSnapClose() {
     arrowSpin();
     snapper.enable();
     g.drawerNode = null;
+    s.secondaryMode = false;
     setTimeout(function () {
         snapper.close('left');
         $('#toolbar').detach().appendTo($('#outside-container'));
@@ -357,8 +358,7 @@ function addPrereqs() {
     }, 500);
 }
 
-function toggleAddNewPrereqMode(confirmed) {
-    confirmed = confirmed === undefined ? false : confirmed;
+function toggleAddNewPrereqMode() {
     s.secondaryMode = !s.secondaryMode;
     var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
     // must get a synchronized reference to non-tentative li's before the async fadeOut()
