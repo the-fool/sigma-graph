@@ -260,9 +260,7 @@ function createNode() {
 function setDrawerContent(node) {
     $('#left-main .drawer-title').fadeOut(200, function () {
         $(this).text(node.name);
-    }).fadeIn(200, function () {
-        $('#prereq-list > li > a.remove > i').click(clickRemovePrereq);
-    });
+    }).fadeIn(200);
 
     initDrawerContent();
     setPrereqs(node);
@@ -343,6 +341,7 @@ function addPrereqs() {
     setTimeout(function() {
         // wait for bacground-color transition
         toggleAddNewPrereqMode();
+        // get rid of the custom styling up above, after transition
         $('#prereq-list li.deactivated').removeAttr('style');
         selected.removeClass('tentative').removeAttr('style');
         var newIDs = selected.map(function() {
@@ -425,7 +424,9 @@ function toggleAddNewPrereqMode() {
  **
  */
 (function () {
-
+    // delegate due to dynamically generated prereqs 
+    $('#prereq-list').on('click', 'li > a.remove > i', clickRemovePrereq);
+    
     $('#close-left i').on('click', function () {
         leftSnapClose();
     });
