@@ -41,13 +41,30 @@ var Node = (function () {
                 position: 'center',
                 textColor: '#fff',
                 fillColor: clr,
-        }];
+            }];
         this.glyphs[0].content = this.name;
     }
     Node.getStaticId = static_id;
     return Node;
 })();
 
+var Edge = (function () {
+    function Edge(source,target) {
+        if ($.inArray([source, target].join(), 
+                      g.edges.map(function (obj) {
+                        return obj.id;
+            })) !== -1) { 
+            return undefined;
+        }
+        
+        this.source = source,
+        this.target = target,
+        this.id = [source, target].join(),
+        this.type = (source === target) ? 'curvedArrow' : 'arrow';
+    }
+    Edge.prototype.size = .5;
+    return Edge;
+})();
 /*
  *  Populate dummy data
  */
@@ -69,21 +86,15 @@ var Node = (function () {
     }
 
     for (i = 0; i < E; i++) {
-        var source = 'n' + (Math.random() * N | 0);
-        var target = 'n' + (Math.random() * N | 0);
-        if ($.inArray([source, target].join(), g.edges.map(function (obj) {
-                return obj.id;
-            })) !== -1) {
+        var source = 'n' + (Math.random() * N | 0),
+            target = 'n' + (Math.random() * N | 0);
+        var e = new Edge(source,target);
+        
+        if (e === undefined) {
             i--;
-            continue;
+            continue; 
         }
-        g.edges.push({
-            id: [source, target].join(),
-            source: source,
-            target: target,
-            type: (source === target) ? 'curvedArrow' : 'arrow',
-            size: .5
-        });
+        g.edges.push(e);
     }
 })(g);
 
