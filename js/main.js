@@ -338,61 +338,75 @@ function addPrereqs() {
     $('#prereq-confirm').hide(400);
     selected.css('background-color', '#323949');
     $('#prereq-list li.deactivated').css('background-color', '#323949');
-    setTimeout(function() {
+    setTimeout(function () {
         // wait for bacground-color transition
-        
         // get rid of the custom styling up above, after transition
         $('#prereq-list li.deactivated').removeAttr('style');
         selected.removeClass('tentative').removeAttr('style');
         toggleAddNewPrereqMode();
-        var newIDs = selected.map(function() {
-           return $(this).data('id'); 
+        var newIDs = selected.map(function () {
+            return $(this).data('id');
         }).get();
         addEdges(newIDs, g.drawerNode);
-        clearSecondarySelections();
-        s.refresh({
-            skipIndexation: true
-        });
+        /* clearSecondarySelections();
+         s.refresh({
+             skipIndexation: true
+         });
+         */
         startLayout();
-    }, 500); 
+    }, 500);
 }
-function toggleAddNewPrereqMode() {
+
+function toggleAddNewPrereqMode(confirmed) {
+    confirmed = confirmed === undefined ? false : confirmed;
     s.secondaryMode = !s.secondaryMode;
     var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
     // must get a synchronized reference to non-tentative li's before the async fadeOut()
     $.when($('#new-prereq>a').fadeOut(200, function () {
-        $(this).text(txt);
-    }).fadeIn(200)).then(function () {
-        var $lis = $(this).parent().toggleClass('in-situ').siblings();
+            $(this).text(txt);
+        }).fadeIn(200),
+        $('#prereq-list > li.tentative').slideUp(),
+        $('#prereq-confirm').hide(400))
+    .then(function () {
+        console.log('hey');
+        var $lis = $('#new-prereq').toggleClass('in-situ').siblings().not('.tentative');
+        $('#prereq-list > li.tentative').remove();
         if (s.secondaryMode) {
             $lis.addClass('deactivated');
         } else {
             $lis.removeClass('deactivated');
         }
         $lis.find('a.remove').slideToggle();
+        clearSecondarySelections();
+        s.refresh({
+            skipIndexation: true
+        });
     });
 }
+
 function addEdges(source, target) {
     if (source.constructor == Array &&
         target.constructor != Array) {
-        source.forEach(function(e) {
+        source.forEach(function (e) {
             s.graph.addEdge({
                 source: e,
                 target: target,
-                id: [e,target].join(),
+                id: [e, target].join(),
                 type: (source === target) ? 'curvedArrow' : 'arrow',
                 size: .5
             });
         });
     }
 }
+
 function clearSecondarySelections() {
-    activeState.nodes().forEach(function(e) {
-       if (e.id !== g.drawerNode) {
-           activeState.dropNodes(e.id);
-       } 
+    activeState.nodes().forEach(function (e) {
+        if (e.id !== g.drawerNode) {
+            activeState.dropNodes(e.id);
+        }
     });
 }
+
 function arrowSpin() {
     var i = $('#close-left i');
     if (i.hasClass('spun')) {
@@ -428,7 +442,7 @@ function toggleEditMode() {
 (function () {
     // delegate due to dynamically generated prereqs 
     $('#prereq-list').on('click', 'li > a.remove > i', clickRemovePrereq);
-    
+
     $('#close-left i').on('click', function () {
         leftSnapClose();
     });
