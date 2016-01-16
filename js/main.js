@@ -51,22 +51,22 @@ var Node = (function () {
 var Edge = (function () {
     function Edge(source, target) {
         // return undefined if duplicate or (after a very naive check) circular
-        if ( ($.inArray([source, target].join(),
-                g.edges.map(function (obj) {
-                    return obj.id;
-                })) !== -1) 
-            && ($.inArray([target, source].join(),
-                g.edges.map(function (obj) {
-                    return obj.id;
-                })) !== -1)
-           ) {
+        var edgeArray = g.edges.map(function (obj) {
+            return obj.id;
+        });
+        var tentativeID = [source, target].join();
+        
+        if (($.inArray(tentativeID,
+                edgeArray) != -1) || ($.inArray([target,source].join(),
+                edgeArray)) != -1) {
             return undefined;
         }
 
         this.source = source,
             this.target = target,
-            this.id = [source, target].join(),
+            this.id = tentativeID,
             this.type = (source === target) ? 'curvedArrow' : 'arrow';
+        
     }
     Edge.prototype.size = .5;
     return Edge;
@@ -79,7 +79,7 @@ var Edge = (function () {
         s,
         o,
         N = 30,
-        E = 20,
+        E = 25,
         d = 0.5;
 
     for (i = 0; i < N; i++) {
@@ -93,10 +93,13 @@ var Edge = (function () {
         var source = 'n' + (Math.random() * N | 0),
             target = 'n' + (Math.random() * N | 0);
         // skip cases where node is its own prereq
-        if (source === target) { i--; continue;}
+        if (source === target) {
+            i--;
+            continue;
+        }
         var e = new Edge(source, target);
 
-        if (e === undefined) {
+        if (e.id === undefined) {
             i--;
             continue;
         }
