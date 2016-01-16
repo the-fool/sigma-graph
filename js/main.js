@@ -49,18 +49,24 @@ var Node = (function () {
 })();
 
 var Edge = (function () {
-    function Edge(source,target) {
-        if ($.inArray([source, target].join(), 
-                      g.edges.map(function (obj) {
-                        return obj.id;
-            })) !== -1) { 
+    function Edge(source, target) {
+        // return undefined if duplicate or (after a very naive check) circular
+        if ( ($.inArray([source, target].join(),
+                g.edges.map(function (obj) {
+                    return obj.id;
+                })) !== -1) 
+            && ($.inArray([target, source].join(),
+                g.edges.map(function (obj) {
+                    return obj.id;
+                })) !== -1)
+           ) {
             return undefined;
         }
-        
+
         this.source = source,
-        this.target = target,
-        this.id = [source, target].join(),
-        this.type = (source === target) ? 'curvedArrow' : 'arrow';
+            this.target = target,
+            this.id = [source, target].join(),
+            this.type = (source === target) ? 'curvedArrow' : 'arrow';
     }
     Edge.prototype.size = .5;
     return Edge;
@@ -76,23 +82,23 @@ var Edge = (function () {
         E = 20,
         d = 0.5;
 
-
     for (i = 0; i < N; i++) {
         var x = 100 * Math.cos(2 * i * Math.PI / N),
             y = 100 * Math.sin(2 * i * Math.PI / N);
         n = new Node(x, y);
-
         g.nodes.push(n);
     }
 
     for (i = 0; i < E; i++) {
         var source = 'n' + (Math.random() * N | 0),
             target = 'n' + (Math.random() * N | 0);
-        var e = new Edge(source,target);
-        
+        // skip cases where node is its own prereq
+        if (source === target) { i--; continue;}
+        var e = new Edge(source, target);
+
         if (e === undefined) {
             i--;
-            continue; 
+            continue;
         }
         g.edges.push(e);
     }
@@ -131,6 +137,7 @@ var s = new sigma({
         glyphThreshold: 6
     },
 });
+
 s.secondaryMode = false;
 
 var glyphRenderer = s.renderers[0];
@@ -218,7 +225,7 @@ function handleTentativePrereq(nodeID) {
                 $.when($(this).slideUp()).then(function () {
                     $(this).remove();
                 });
-                return false;
+                return false; // end the jQuery .each() loop
             }
         });
     } else {
@@ -374,25 +381,25 @@ function toggleAddNewPrereqMode() {
     var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
     // must get a synchronized reference to non-tentative li's before the async fadeOut()
     $.when($('#new-prereq>a').fadeOut(200, function () {
-            $(this).text(txt);
-        }).fadeIn(200),
-        $('#prereq-list > li.tentative').slideUp(),
-        $('#prereq-confirm').hide(400))
-    .then(function () {
-        console.log('hey');
-        var $lis = $('#new-prereq').toggleClass('in-situ').siblings().not('.tentative');
-        $('#prereq-list > li.tentative').remove();
-        if (s.secondaryMode) {
-            $lis.addClass('deactivated');
-        } else {
-            $lis.removeClass('deactivated');
-        }
-        $lis.find('a.remove').slideToggle();
-        clearSecondarySelections();
-        s.refresh({
-            skipIndexation: true
+                $(this).text(txt);
+            }).fadeIn(200),
+            $('#prereq-list > li.tentative').slideUp(),
+            $('#prereq-confirm').hide(400))
+        .then(function () {
+            console.log('hey');
+            var $lis = $('#new-prereq').toggleClass('in-situ').siblings().not('.tentative');
+            $('#prereq-list > li.tentative').remove();
+            if (s.secondaryMode) {
+                $lis.addClass('deactivated');
+            } else {
+                $lis.removeClass('deactivated');
+            }
+            $lis.find('a.remove').slideToggle();
+            clearSecondarySelections();
+            s.refresh({
+                skipIndexation: true
+            });
         });
-    });
 }
 
 function addEdges(source, target) {
