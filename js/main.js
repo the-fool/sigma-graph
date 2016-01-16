@@ -1,14 +1,27 @@
-var g = {
-        nodes: [],
-        edges: [],
-        drawerNode: null
-    },
-    layoutEnum = Object.freeze({
-        Fruchterman: 0,
-        Dagre: 1
-    }),
-    layoutStyle = layoutEnum.Dagre,
-    editMode = false;
+var Graph = (function () {
+    var id = 0,
+        layoutEnum = Object.freeze({
+            Fruchterman: 0,
+            Dagre: 1
+        });
+    function staticID() {
+        return id;
+    }
+    function Graph() {
+        this.id = "g" + id++;
+        this.nodes = [];
+        this.edges = [];
+        this.layoutStyle = layoutEnum.Dagre;
+        this.editMode = false;
+        this.drawerNode = null;
+    }
+    Graph.prototype.getStaticID = staticID;
+    return Graph;
+
+
+})();
+
+var g = new Graph();
 
 var Node = (function () {
     var i,
@@ -44,7 +57,7 @@ var Node = (function () {
             }];
         this.glyphs[0].content = this.name;
     }
-    Node.getStaticId = static_id;
+    Node.prototype.getStaticId = static_id;
     return Node;
 })();
 
@@ -55,9 +68,9 @@ var Edge = (function () {
             return obj.id;
         });
         var tentativeID = [source, target].join();
-        
+
         if (($.inArray(tentativeID,
-                edgeArray) != -1) || ($.inArray([target,source].join(),
+                edgeArray) != -1) || ($.inArray([target, source].join(),
                 edgeArray)) != -1) {
             return undefined;
         }
@@ -66,7 +79,7 @@ var Edge = (function () {
             this.target = target,
             this.id = tentativeID,
             this.type = (source === target) ? 'curvedArrow' : 'arrow';
-        
+
     }
     Edge.prototype.size = .5;
     return Edge;
