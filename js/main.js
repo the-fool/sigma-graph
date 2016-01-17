@@ -1,27 +1,73 @@
+// our global graph
+// half linkurious, half sigma, half custom extensions
+var s = null;
+(function (s) {
+    settings = {
+        graph: g,
+        //container: 'graph-container',
+        renderer: {
+            container: document.getElementById('graph-container'),
+            type: 'canvas'
+        },
+        settings: {
+            secondaryActiveColor: 'rgba(40,251,40,.5)',
+            borderSize: 1,
+            outerBorderSize: 1,
+            defaultNodeBorderColor: 'rgba(255,215,0,.1)',
+            defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
+            edgeHoverExtremities: true,
+            enableHovering: true,
+            nodeHoverLevel: 2,
+            defaultNodeHoverColor: 'rgba(255,215,0,.05)',
+            nodeHoverColor: 'default',
+            minEdgeSize: 3,
+            maxEdgeSize: 3,
+            minArrowSize: 5,
+            minNodeSize: 20,
+            maxNodeSize: 20,
+            glyphScale: .99,
+            glyphFontScale: .6,
+            glyphLineWidth: 1,
+            glyphStrokeIfText: false,
+            glyphTextThreshold: 1,
+            glyphThreshold: 6
+        },
+    }
+    s = new MySigma(settings);
+})(s);
+
+
 var Graph = (function () {
-    var id = 0,
-        layoutEnum = Object.freeze({
-            Fruchterman: 0,
-            Dagre: 1
-        });
+    var id = 0;
+
     function staticID() {
         return id;
     }
+
     function Graph() {
         this.id = "g" + id++;
         this.nodes = [];
         this.edges = [];
-        this.layoutStyle = layoutEnum.Dagre;
-        this.editMode = false;
         this.drawerNode = null;
     }
     Graph.prototype.getStaticID = staticID;
+    Graph.prototype.addEdge = function (source, target) {
+        var e = new Edge(source, target);
+        if (typeof e.id !== 'undefined') {
+            this.edges.push(e);
+            return e;
+        } else {
+            return null;
+        }
+    };
+    Graph.prototype.addNode = function (x, y) {
+        var n = new Node(x, y);
+        this.nodes.push(n);
+        return n;
+    };
+
     return Graph;
-
-
 })();
-
-var g = new Graph();
 
 var Node = (function () {
     var i,
@@ -39,434 +85,410 @@ var Node = (function () {
         });
 
     function static_id() {
-        return i;
+        return id;
     };
 
     function Node(x, y) {
         var clr = cs[(Math.random() * C) | 0].color;
-        this.color = clr,
-            this.id = 'n' + id++,
-            this.name = 'CS' + (id + 10) * 10,
-            this.size = 1, // to be set by sigma global settings
-            this.x = typeof x !== 'undefined' ? x : 10,
-            this.y = typeof y !== 'undefined' ? y : 10,
-            this.glyphs = [{
-                position: 'center',
-                textColor: '#fff',
-                fillColor: clr,
+        this.color = clr;
+        this.id = 'n' + id++;
+        this.name = 'CS' + (id + 10) * 10;
+        this.size = 1; // to be set by sigma global settings
+        this.x = typeof x !== 'undefined' ? x : 10;
+        this.y = typeof y !== 'undefined' ? y : 10;
+        this.glyphs = [{
+            position: 'center',
+            textColor: '#fff',
+            fillColor: clr,
             }];
         this.glyphs[0].content = this.name;
+        return this;
     }
     Node.prototype.getStaticId = static_id;
     return Node;
 })();
 
 var Edge = (function () {
+    var edgeCache = [];
+    var generateEdgeID = (source, target) => [source, target].join();
+
     function Edge(source, target) {
         // return undefined if duplicate or (after a very naive check) circular
-        var edgeArray = g.edges.map(function (obj) {
-            return obj.id;
-        });
-        var tentativeID = [source, target].join();
+        var tentativeID = this.genarateEdgeID(source, target);
 
-        if (($.inArray(tentativeID,
-                edgeArray) != -1) || ($.inArray([target, source].join(),
-                edgeArray)) != -1) {
+        // TODO : Implement edge-chasing algo to find circular dependencies
+        if ((source === target) ||
+            ($.inArray(tentativeID,
+                edgeCache) != -1) ||
+            ($.inArray([target, source].join(),
+                edgeCache) != -1)) {
+            this.id = undefined;
             return undefined;
+        } else {
+            this.source = source;
+            this.target = target;
+            this.id = tentativeID;
+            edgeCache.push(this.id);
+            return this;
         }
-
-        this.source = source,
-            this.target = target,
-            this.id = tentativeID,
-            this.type = (source === target) ? 'curvedArrow' : 'arrow';
-
+        // not reached
     }
     Edge.prototype.size = .5;
+    Edge.prototype.genID = generateEdgeID;
     return Edge;
 })();
-/*
- *  Populate dummy data
- */
-(function (g) {
-    var i,
-        s,
-        o,
-        N = 30,
-        E = 25,
-        d = 0.5;
 
-    for (i = 0; i < N; i++) {
-        var x = 100 * Math.cos(2 * i * Math.PI / N),
-            y = 100 * Math.sin(2 * i * Math.PI / N);
-        n = new Node(x, y);
-        g.nodes.push(n);
-    }
-
-    for (i = 0; i < E; i++) {
-        var source = 'n' + (Math.random() * N | 0),
-            target = 'n' + (Math.random() * N | 0);
-        // skip cases where node is its own prereq
-        if (source === target) {
-            i--;
-            continue;
-        }
-        var e = new Edge(source, target);
-
-        if (e.id === undefined) {
-            i--;
-            continue;
-        }
-        g.edges.push(e);
-    }
-})(g);
 
 //sigma.renderers.def = sigma.renderers.canvas;
+MySigma = (function () {
+    var layoutEnum = Object.freeze({
+        Fruchterman: 0,
+        Dagre: 1
+    });
 
-var s = new sigma({
-    graph: g,
-    //container: 'graph-container',
-    renderer: {
-        container: document.getElementById('graph-container'),
-        type: 'canvas'
-    },
-    settings: {
-        secondaryActiveColor: 'rgba(40,251,40,.5)',
-        borderSize: 1,
-        outerBorderSize: 1,
-        defaultNodeBorderColor: 'rgba(255,215,0,.1)',
-        defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
-        edgeHoverExtremities: true,
-        enableHovering: true,
-        nodeHoverLevel: 2,
-        defaultNodeHoverColor: 'rgba(255,215,0,.05)',
-        nodeHoverColor: 'default',
-        minEdgeSize: 3,
-        maxEdgeSize: 3,
-        minArrowSize: 5,
-        minNodeSize: 20,
-        maxNodeSize: 20,
-        glyphScale: .99,
-        glyphFontScale: .6,
-        glyphLineWidth: 1,
-        glyphStrokeIfText: false,
-        glyphTextThreshold: 1,
-        glyphThreshold: 6
-    },
-});
+    function MySigma(settings, domManager) {
+        this.domManager = (typeof domManager !== 'undefined') ? domManager : {};
+        this.drawerNode = null;
+        this.s = new sigma(settings);
+        this.a = sigma.plugins.activeState(s);
+        this.g = settings.graph;
+        this.secondaryMode = false;
+        this.layoutStyle = layoutEnum.Fruchterman;
+        //var secondaryActiveState = sigma.plugins.activeState(s);
 
-s.secondaryMode = false;
 
-var glyphRenderer = s.renderers[0];
-glyphRenderer.bind('render', function (e) {
-    glyphRenderer.glyphs();
-});
-
-var activeState = sigma.plugins.activeState(s);
-var secondaryActiveState = sigma.plugins.activeState(s);
-var selectANode = sigma.plugins.select(s, activeState, glyphRenderer, selectCallback, {
-    exclusive: true
-});
-
-var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
-    iterations: 500,
-    easing: 'quadraticInOut',
-    duration: 800
-});
-
-var dagreListener = sigma.layouts.dagre.configure(s, {
-    directed: true, // take edge direction into account
-    rankdir: 'LR', // Direction for rank nodes. Can be TB, BT, LR, or RL,
-    // where T = top, B = bottom, L = left, and R = right.
-    easing: 'quadraticInOut', // animation transition function
-    duration: 800, // animation duration
-    // nodes : s.graph.nodes().slice(0,30), // subset of nodes
-    boundingBox: {
-        minX: 10,
-        maxX: 15,
-        minY: 5,
-        maxY: 10
-    } // constrain layout bounds ; object or true (all current positions of the given nodes)
-});
-
-function startLayout() {
-    switch (layoutStyle) {
-    case layoutEnum.Dagre:
-        sigma.layouts.dagre.start(s);
-        break;
-    case layoutEnum.Fruchterman:
-        sigma.layouts.fruchtermanReingold.start(s);
-        break;
-    default:
-        console.log("something went wrong with the layout switch");
+        // The following private var's are only declared for the sake of configuring sigma plugins
+        var glyphRenderer = this.s.renderers[0];
+        glyphRenderer.bind('render', function (e) {
+            glyphRenderer.glyphs();
+        });
+        var selectANode = sigma.plugins.select(this.s, activeState, glyphRenderer, selectCallback, {
+            exclusive: true
+        });
+        var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
+            iterations: 500,
+            easing: 'quadraticInOut',
+            duration: 800
+        });
+        var dagreListener = sigma.layouts.dagre.configure(this.s, {
+            directed: true, // take edge direction into account
+            rankdir: 'LR', // Direction for rank nodes. Can be TB, BT, LR, or RL,
+            // where T = top, B = bottom, L = left, and R = right.
+            easing: 'cubicInOut', // animation transition function
+            duration: 800, // animation duration
+            boundingBox: {
+                minX: 10,
+                maxX: 15,
+                minY: 5,
+                maxY: 10
+            } // constrain layout bounds ; object or true (all current positions of the given nodes)
+        });
+    };
+    MySigma.prototype.startLayout = function () {
+        switch (this.layoutStyle) {
+        case layoutEnum.Dagre:
+            sigma.layouts.dagre.start(this.s);
+            break;
+        case layoutEnum.Fruchterman:
+            sigma.layouts.fruchtermanReingold.start(this.s);
+            break;
+        default:
+            console.log("something went wrong with the layout switch");
+        }
     }
+    MySigma.prototype.selectCallback = function (target) {
+        if (target.constructor === Array) {
+            target = target[0];
+        }
+        if (!this.secondaryMode) {
+            if (target === undefined ||
+                target.length === 0 && this.drawerNode !== null) {
+                domManager.leftSnapClose();
+            } else {
+                this.drawerNode = target;
+                domManager.setDrawerContent(this.s.graph.nodes(target));
+                domManager.leftSnapOpen();
+            }
+        } else { // secondary mode == addition of new prereqs
+            domManager.handleTentativePrereq(target);
+        };
+    };
+    MySigma.prototype.getActives = function () {
+        var actives = [];
+        if (this.secondaryMode) {
+            // in secondary mode, we want every active node except the main selected one
+            actives = this.a.nodes().map(function (e) {
+                if (e.id !== this.drawerNode) {
+                    return e.id;
+                }
+            });
+        } else {
+            actives = this.a.nodes();
+        }
+    };
+    MySigma.prototype.getNode = function (id) {
+        return s.graph.nodes(id);
+    };
+    MySigma.prototype.createNode = function () {
+        var n = this.g.addNode();
+        this.s.graph.addNode(n);
+        this.a.dropNodes();
+        this.a.addNodes(n.id);
+        selectCallback(n.id);
+        this.s.refresh();
+        startLayout();
+    };
+    MySigma.prototype.reset = function () {
+        this.drawerNode = null;
+        this.s.secondaryMode = false;
+        this.a.dropNodes();
+        this.s.refresh({
+            skipIndexation: true
+        });
+    };
+    MySigma.prototype.getPrereqs = function (node) {
+        var prereqs = [];
+        this.s.graph.edges().forEach(function (v, i, a) {
+            if (v.target === node.id) {
+                prereqs.push(s.graph.nodes(v.source));
+            }
+        });
+        return prereqs;
+    };
+    MySigma.prototype.genEdgeID: function (source, target) {
+        return [source, target].join();
+    };
+    MySigma.prototype.removePrereqs = function (head, prereqs) {
+        prereqs.forEach(function (v) {
+            s.graph.dropEdges(genEdgeID(v, head));
+        });
+    };
+    MySigma.prototype.addEdges = function (sources, target) {
+        // safety check --
+        $.makeArray(sources);
+        target = (typeof target === 'undefined') ? this.drawerNode : target;
+        sources.forEach(function (source) {
+            e = g.addEdge(source, target);
+            if (e !== null) {
+                s.graph.addEdge(e);
+            } else {
+                console.log("Cannot add edge from " + source + " to " + target);
+            }
+        });
+    };
+    MySigma.prototype.toggleSecondaryMode = function () {
+        this.secondaryMode = !this.secondaryMode;
+        return this.secondaryMode;
+    };
+    MySigma.prototype.clearSecondarySelections = function () {
+        this.a.dropNodes();
+        this.a.addNodes(this.drawerNode);
+        this.s.refresh({
+            skipIndexation: true
+        });
+    };
+
 }
 
 
-function selectCallback(target) {
-    if (target.constructor === Array) {
-        target = target[0];
-    }
-    if (!s.secondaryMode) {
-        if (target === undefined ||
-            target.length === 0 && g.drawerNode !== null) {
-            leftSnapClose();
-        } else {
-            g.drawerNode = target;
-            setDrawerContent(s.graph.nodes(target));
-            leftSnapOpen();
+
+})();
+
+domManager = {
+    // MUST initiate an instance of the custom sigma-wrapper
+    editMode: false,
+    init: function (sigmaInstance) {
+        this.s = sigmaInstance;
+    },
+    setDrawerContent: function (node) {
+        $('#left-main .drawer-title').fadeOut(200, function () {
+            $(this).text(node.name);
+        }).fadeIn(200);
+
+        initDrawerContent();
+        setPrereqs(node);
+    },
+    handleTentativePrereq: function (nodeID) {
+        // Called from the selectCallback
+        // when in 'secondary-mode', when multiple nodes can be selected
+        var tentatives = s.getActives();
+        // in case of deselect
+        if (nodeID === undefined) {
+            $('#prereq-list>li.tentative').each(function () {
+                if (tentatives[0] === undefined) {
+                    tentatives[0] = '';
+                }
+                //jQuery's .each() will terminate prematurely if given an array of undefined's
+                if ($.inArray($(this).data('id'), tentatives) === -1) {
+                    $.when($(this).slideUp()).then(function () {
+                        $(this).remove();
+                    });
+                    return false; // end the jQuery .each() loop
+                }
+            });
+        } else
+        // Ordinary positive selection of a single node
+        {
+            $(genPrereqLi(s.getNode(nodeID), 'tentative')).prependTo($('#prereq-list'))
+                .hide().show(300);
         }
-    } else { // secondary mode == addition of new prereqs
-        handleTentativePrereq(target);
-        if (activeState.nodes().length > 1) {
+        if (tentatives.length > 0) {
             $('#prereq-confirm').show(300);
         } else {
             $('#prereq-confirm').hide(300);
         }
-    }
-}
 
-function handleTentativePrereq(nodeID) {
-    if (nodeID === undefined) {
-        var tentatives = activeState.nodes().map(function (e) {
-            if (e.id !== g.drawerNode) {
-                return e.id;
-            }
-        });
-        $('#prereq-list>li.tentative').each(function () {
-            if (tentatives[0] === undefined) {
-                tentatives[0] = '';
-            }
-            //jQuery's .each() will terminate prematurely if given an array of undefined's
-            if ($.inArray($(this).data('id'), tentatives) === -1) {
-                $.when($(this).slideUp()).then(function () {
-                    $(this).remove();
-                });
-                return false; // end the jQuery .each() loop
-            }
-        });
-    } else {
-        $(genPrereqLi(s.graph.nodes(nodeID), 'tentative')).prependTo($('#prereq-list'))
-            .hide().show(300);
-    }
-}
+    },
+    setPrereqs: function (node) {
+        var prereqs = s.getPrereqs();
+        var list = '';
+        $('#prereq-list li:not(#new-prereq)').remove();
 
-
-function leftSnapOpen() {
-    if (snapper.state().state !== 'closed') {
-        arrowSpin();
-        return;
-    }
-
-    $('#toolbar').detach().appendTo($('#outside-container'));
-    snapper.open('left');
-    arrowSpin();
-    snapper.disable();
-}
-
-function leftSnapClose() {
-    arrowSpin();
-    snapper.enable();
-    g.drawerNode = null;
-    s.secondaryMode = false;
-    setTimeout(function () {
-        snapper.close('left');
-        $('#toolbar').detach().appendTo($('#outside-container'));
-    }, 300);
-    activeState.dropNodes();
-    s.refresh({
-        skipIndexation: true
-    });
-    initDrawerContent();
-}
-
-function createNode() {
-    var n = new Node();
-
-    s.graph.addNode(n);
-    activeState.dropNodes();
-    activeState.addNodes(n.id);
-
-    selectCallback(n.id);
-
-    s.refresh();
-    startLayout();
-}
-
-function setDrawerContent(node) {
-    $('#left-main .drawer-title').fadeOut(200, function () {
-        $(this).text(node.name);
-    }).fadeIn(200);
-
-    initDrawerContent();
-    setPrereqs(node);
-}
-
-function setPrereqs(node) {
-    var prereqs = [],
-        list = '';
-    $('#prereq-list li:not(#new-prereq)').remove();
-    s.graph.edges().forEach(function (v, i, a) {
-        if (v.target === node.id) {
-            prereqs.push(s.graph.nodes(v.source));
+        if (prereqs.length > 0) {
+            prereqs.forEach(function (v) {
+                list += genPrereqLi(v);
+            });
+        } else {
+            list = '<li><a class="none"> - none - </a></li>';
         }
-    });
-    if (prereqs.length > 0) {
-        prereqs.forEach(function (v) {
-            list += genPrereqLi(v);
-        });
-    } else {
-        list = '<li><a class="none"> - none - </a></li>';
-    }
-    $('#prereq-list').prepend(list);
-}
-
-function initDrawerContent() {
-    $('.sublist-confirm').hide(200);
-    $('#node-info-list>ul.sub').hide(200);
-}
-
-function genPrereqLi(node, cls) {
-    var ret = '',
-        c = cls == undefined ? '""' : cls;
-    ret += '<li data-id="' + node.id + '" class="' + c + '">'
-    ret += '<a href="#" class="heading">' + node.name;
-    ret += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg">';
-    ret += '</i></a></li>';
-    return ret;
-}
-
-function clickRemovePrereq() {
-    var $i = $(this),
-        $li = $i.parent().parent();
-    $li.toggleClass('selected');
-    if ($li.hasClass('selected') || $li.siblings('.selected').length > 0) {
-        $('#prereq-confirm').show({
-            duration: 400
-        });
-    } else {
+        $('#prereq-list').prepend(list);
+    },
+    initDrawerContent: function () {
+        $('.sublist-confirm').hide(200);
+        $('#node-info-list>ul.sub').hide(200);
+    },
+    genPrereqLi: function (node, cls) {
+        var ret = '',
+            c = cls == undefined ? '""' : cls;
+        ret += '<li data-id="' + node.id + '" class="' + c + '">'
+        ret += '<a href="#" class="heading">' + node.name;
+        ret += '</a><a class="remove edit-opt"><i class="fa fa-remove fa-lg">';
+        ret += '</i></a></li>';
+        return ret;
+    },
+    clickRemovePrereq: function () {
+        var $i = $(this),
+            $li = $i.parent().parent();
+        $li.toggleClass('selected');
+        if ($li.hasClass('selected') || $li.siblings('.selected').length > 0) {
+            $('#prereq-confirm').show({
+                duration: 400
+            });
+        } else {
+            $('#prereq-confirm').hide(400);
+        }
+    },
+    removePrereqs: function () {
+        var selected = $('#prereq-list li.selected');
         $('#prereq-confirm').hide(400);
-    }
-}
-
-function removePrereqs() {
-    var selected = $('#prereq-list li.selected');
-    $('#prereq-confirm').hide(400);
-    selected.slideToggle({
-        always: function () {
-            if ($('#prereq-list').children('li:not(.selected)').length === 1) {
-                $('#prereq-list').prepend('<li style="display:none"><a> - none - </a></li>');
-                $('#prereq-list>li:first-child').slideToggle();
+        selected.slideToggle({
+            always: function () {
+                if ($('#prereq-list').children('li:not(.selected)').length === 1) {
+                    $('#prereq-list').prepend('<li style="display:none"><a> - none - </a></li>');
+                    $('#prereq-list>li:first-child').slideToggle();
+                }
+                $(this).remove();
             }
-            $(this).remove();
-        }
-    });
-    selected.each(function () {
-        s.graph.dropEdges([$(this).data('id'), g.drawerNode].join());
-    });
-    startLayout();
-}
-
-function addPrereqs() {
-    var selected = $('#prereq-list li.tentative');
-    // set the elements to display: none
-    selected.find('a.remove').hide();
-    $('#prereq-confirm').hide(400);
-    selected.css('background-color', '#323949');
-    $('#prereq-list li.deactivated').css('background-color', '#323949');
-    setTimeout(function () {
-        // wait for bacground-color transition
-        // get rid of the custom styling up above, after transition
-        $('#prereq-list li.deactivated').removeAttr('style');
-        selected.removeClass('tentative').removeAttr('style');
-        toggleAddNewPrereqMode();
-        var newIDs = selected.map(function () {
-            return $(this).data('id');
-        }).get();
-        addEdges(newIDs, g.drawerNode);
-        /* clearSecondarySelections();
-         s.refresh({
-             skipIndexation: true
-         });
-         */
-        startLayout();
-    }, 500);
-}
-
-function toggleAddNewPrereqMode() {
-    s.secondaryMode = !s.secondaryMode;
-    var txt = s.secondaryMode ? "- Select All New Prereqs -" : "- Create New Prereq -";
-    // must get a synchronized reference to non-tentative li's before the async fadeOut()
-    $.when($('#new-prereq>a').fadeOut(200, function () {
-                $(this).text(txt);
-            }).fadeIn(200),
-            $('#prereq-list > li.tentative').slideUp(),
-            $('#prereq-confirm').hide(400))
-        .then(function () {
-            console.log('hey');
-            var $lis = $('#new-prereq').toggleClass('in-situ').siblings().not('.tentative');
-            $('#prereq-list > li.tentative').remove();
-            if (s.secondaryMode) {
-                $lis.addClass('deactivated');
-            } else {
-                $lis.removeClass('deactivated');
-            }
-            $lis.find('a.remove').slideToggle();
-            clearSecondarySelections();
-            s.refresh({
-                skipIndexation: true
-            });
         });
-}
+        selected = selected.map(function () {
+            $(this).data('id');
+        });
+        s.removePrereqs(s.drawerNode, selected);
+        s.startLayout();
+    },
+    leftSnapClose: function () {
+        arrowSpin();
+        snapper.enable();
+        setTimeout(function () {
+            snapper.close('left');
+            $('#toolbar').detach().appendTo($('#outside-container'));
+        }, 300);
+        initDrawerContent();
+        this.s.reset();
+    },
+    leftSnapOpen: function () {
+        if (snapper.state().state !== 'closed') {
+            arrowSpin();
+            return;
+        }
 
-function addEdges(source, target) {
-    if (source.constructor == Array &&
-        target.constructor != Array) {
-        source.forEach(function (e) {
-            s.graph.addEdge({
-                source: e,
-                target: target,
-                id: [e, target].join(),
-                type: (source === target) ? 'curvedArrow' : 'arrow',
-                size: .5
+        $('#toolbar').detach().appendTo($('#outside-container'));
+        snapper.open('left');
+        arrowSpin();
+        snapper.disable();
+    },
+    addPrereqs: function () {
+        var selected = $('#prereq-list li.tentative');
+        // set the elements to display: none
+        selected.find('a.remove').hide();
+        $('#prereq-confirm').hide(400);
+        selected.css('background-color', '#323949');
+        $('#prereq-list li.deactivated').css('background-color', '#323949');
+        setTimeout(function () {
+            // wait for bacground-color transition
+            // get rid of the custom styling up above, after transition
+            $('#prereq-list li.deactivated').removeAttr('style');
+            selected.removeClass('tentative').removeAttr('style');
+            toggleAddNewPrereqMode();
+            var newIDs = selected.map(function () {
+                return $(this).data('id');
+            }).get();
+            s.addEdges(newIDs);
+            s.startLayout();
+        }, 500);
+    },
+    toggleAddNewPrereqMode: function () {
+        var sm = s.toggleSecondaryMode;
+        var txt = sm ? "- Select All New Prereqs -" : "- Create New Prereq -";
+        // must get a synchronized reference to non-tentative li's before the async fadeOut()
+        $.when($('#new-prereq>a').fadeOut(200, function () {
+                    $(this).text(txt);
+                }).fadeIn(200),
+                $('#prereq-list > li.tentative').slideUp(),
+                $('#prereq-confirm').hide(400))
+            .then(function () {
+                console.log('hey');
+                var $lis = $('#new-prereq').toggleClass('in-situ').siblings().not('.tentative');
+                $('#prereq-list > li.tentative').remove();
+                if (s.secondaryMode) {
+                    $lis.addClass('deactivated');
+                } else {
+                    $lis.removeClass('deactivated');
+                }
+                $lis.find('a.remove').slideToggle();
+                s.clearSecondarySelections();
             });
+    },
+    arrowSpin: function () {
+        var i = $('#close-left i');
+        if (i.hasClass('spun')) {
+            i.transition({
+                rotate: '0deg'
+            });
+            i.removeClass('spun');
+        } else {
+            i.transition({
+                rotate: '1080deg'
+            });
+            i.addClass('spun');
+        },
+    },
+    toggleEditMode: function () {
+        editMode = !editMode;
+        $('#container').toggleClass('edit-mode');
+
+        $.when($('#prereq-list>li>a.remove').slideToggle(),
+            $('#new-prereq').slideToggle(),
+            $('#new-node').slideToggle()
+        ).then(function () {
+            $('#node-info-list').toggleClass('edit-mode');
         });
     }
 }
 
-function clearSecondarySelections() {
-    activeState.nodes().forEach(function (e) {
-        if (e.id !== g.drawerNode) {
-            activeState.dropNodes(e.id);
-        }
-    });
-}
 
-function arrowSpin() {
-    var i = $('#close-left i');
-    if (i.hasClass('spun')) {
-        i.transition({
-            rotate: '0deg'
-        });
-        i.removeClass('spun');
-    } else {
-        i.transition({
-            rotate: '1080deg'
-        });
-        i.addClass('spun');
-    }
-}
 
-function toggleEditMode() {
-    editMode = !editMode;
-    $('#container').toggleClass('edit-mode');
-
-    $.when($('#prereq-list>li>a.remove').slideToggle(),
-        $('#new-prereq').slideToggle(),
-        $('#new-node').slideToggle()
-    ).then(function () {
-        $('#node-info-list').toggleClass('edit-mode');
-    });
-}
+function
 
 
 /*
@@ -530,6 +552,37 @@ function toggleEditMode() {
     })
 })();
 
+/*
+ *  Populate dummy data
+ */
+(function () {
+    g = new Graph();
+
+    var i,
+        s,
+        o,
+        N = 30,
+        E = 25,
+        d = 0.5;
+
+    for (i = 0; i < N; i++) {
+        var x = 100 * Math.cos(2 * i * Math.PI / N),
+            y = 100 * Math.sin(2 * i * Math.PI / N);
+        g.addNode(x, y);
+    }
+
+    for (i = 0; i < E; i++) {
+        var source = 'n' + (Math.random() * N | 0),
+            target = 'n' + (Math.random() * N | 0);
+        // skip cases where node is its own prereq
+
+        e = g.addEdge(source, target);
+        if (e.id === undefined) {
+            i--;
+            continue;
+        }
+    }
+})(g);
 
 $(function () {
     startLayout();
