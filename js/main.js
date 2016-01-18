@@ -1,43 +1,8 @@
-// our global graph
-// half linkurious, half sigma, half custom extensions
-var s = null;
-(function (s) {
-    settings = {
-        graph: g,
-        //container: 'graph-container',
-        renderer: {
-            container: document.getElementById('graph-container'),
-            type: 'canvas'
-        },
-        settings: {
-            secondaryActiveColor: 'rgba(40,251,40,.5)',
-            borderSize: 1,
-            outerBorderSize: 1,
-            defaultNodeBorderColor: 'rgba(255,215,0,.1)',
-            defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
-            edgeHoverExtremities: true,
-            enableHovering: true,
-            nodeHoverLevel: 2,
-            defaultNodeHoverColor: 'rgba(255,215,0,.05)',
-            nodeHoverColor: 'default',
-            minEdgeSize: 3,
-            maxEdgeSize: 3,
-            minArrowSize: 5,
-            minNodeSize: 20,
-            maxNodeSize: 20,
-            glyphScale: .99,
-            glyphFontScale: .6,
-            glyphLineWidth: 1,
-            glyphStrokeIfText: false,
-            glyphTextThreshold: 1,
-            glyphThreshold: 6
-        },
-    }
-    s = new MySigma(settings);
-})(s);
-
-
 var Graph = (function () {
+    /*  A wrapper around the Sigma.graph class
+     *  
+     */
+
     var id = 0;
 
     function staticID() {
@@ -139,7 +104,6 @@ var Edge = (function () {
 })();
 
 
-//sigma.renderers.def = sigma.renderers.canvas;
 MySigma = (function () {
     var layoutEnum = Object.freeze({
         Fruchterman: 0,
@@ -147,11 +111,11 @@ MySigma = (function () {
     });
 
     function MySigma(settings, domManager) {
+        this.g = new Graph();
         this.domManager = (typeof domManager !== 'undefined') ? domManager : {};
         this.drawerNode = null;
         this.s = new sigma(settings);
         this.a = sigma.plugins.activeState(s);
-        this.g = settings.graph;
         this.secondaryMode = false;
         this.layoutStyle = layoutEnum.Fruchterman;
         //var secondaryActiveState = sigma.plugins.activeState(s);
@@ -276,6 +240,19 @@ MySigma = (function () {
             }
         });
     };
+    MySigma.prototype.toggleLayout = function () {
+     switch (this.layoutStyle) {
+     case layoutEnum.Dagre:
+         layoutStyle = layoutEnum.Fruchterman;
+         break;
+     case layoutEnum.Fruchterman:
+         layoutStyle = layoutEnum.Dagre;
+         break;
+     default:
+         console.log("eye error");
+     }
+     startLayout();
+ }
     MySigma.prototype.toggleSecondaryMode = function () {
         this.secondaryMode = !this.secondaryMode;
         return this.secondaryMode;
@@ -287,11 +264,6 @@ MySigma = (function () {
             skipIndexation: true
         });
     };
-
-}
-
-
-
 })();
 
 domManager = {
@@ -486,46 +458,93 @@ domManager = {
     }
 }
 
+var s = new MySigma({
+        renderer: {
+            container: document.getElementById('graph-container'),
+            type: 'canvas'
+        },
+        settings: {
+            secondaryActiveColor: 'rgba(40,251,40,.5)',
+            borderSize: 1,
+            outerBorderSize: 1,
+            defaultNodeBorderColor: 'rgba(255,215,0,.1)',
+            defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
+            edgeHoverExtremities: true,
+            enableHovering: true,
+            nodeHoverLevel: 2,
+            defaultNodeHoverColor: 'rgba(255,215,0,.05)',
+            nodeHoverColor: 'default',
+            minEdgeSize: 3,
+            maxEdgeSize: 3,
+            minArrowSize: 5,
+            minNodeSize: 20,
+            maxNodeSize: 20,
+            glyphScale: .99,
+            glyphFontScale: .6,
+            glyphLineWidth: 1,
+            glyphStrokeIfText: false,
+            glyphTextThreshold: 1,
+            glyphThreshold: 6
+        },
+    },
+    domManager);
 
 
-function
+//  Populate dummy data 
+(function (g) {
+    var i,
+        s,
+        o,
+        N = 30,
+        E = 25,
+        d = 0.5;
 
+    for (i = 0; i < N; i++) {
+        var x = 100 * Math.cos(2 * i * Math.PI / N),
+            y = 100 * Math.sin(2 * i * Math.PI / N);
+        g.addNode(x, y);
+    }
 
-/*
+    for (i = 0; i < E; i++) {
+        var source = 'n' + (Math.random() * N | 0),
+            target = 'n' + (Math.random() * N | 0);
+        // skip cases where node is its own prereq
+
+        e = g.addEdge(source, target);
+        if (e.id === undefined) {
+            i--;
+            continue;
+        }
+    }
+})(s.g);
+domManager.init(s);
+s.s.refresh();
+
+ /*
  ** All static event bindings
  **
  */
 (function () {
     // delegate due to dynamically generated prereqs 
-    $('#prereq-list').on('click', 'li > a.remove > i', clickRemovePrereq);
+    $('#prereq-list').on('click', 'li > a.remove > i', domManager.clickRemovePrereq);
 
     $('#close-left i').on('click', function () {
-        leftSnapClose();
+         domManager.leftSnapClose();
     });
 
     $('#close-right i').on('click', function () {
-        rightSnapClose();
+         domManager.rightSnapClose();
     });
 
 
     $('#wrench').on('click', function () {
         $(this).toggleClass('active');
-        toggleEditMode();
+         domManager.toggleEditMode();
     });
 
 
     $('#eye').on('click', function () {
-        switch (layoutStyle) {
-        case layoutEnum.Dagre:
-            layoutStyle = layoutEnum.Fruchterman;
-            break;
-        case layoutEnum.Fruchterman:
-            layoutStyle = layoutEnum.Dagre;
-            break;
-        default:
-            console.log("eye error");
-        }
-        startLayout();
+        s.toggleLayout();
     });
 
     $('#plus').on('click', function () {
@@ -552,37 +571,6 @@ function
     })
 })();
 
-/*
- *  Populate dummy data
- */
-(function () {
-    g = new Graph();
-
-    var i,
-        s,
-        o,
-        N = 30,
-        E = 25,
-        d = 0.5;
-
-    for (i = 0; i < N; i++) {
-        var x = 100 * Math.cos(2 * i * Math.PI / N),
-            y = 100 * Math.sin(2 * i * Math.PI / N);
-        g.addNode(x, y);
-    }
-
-    for (i = 0; i < E; i++) {
-        var source = 'n' + (Math.random() * N | 0),
-            target = 'n' + (Math.random() * N | 0);
-        // skip cases where node is its own prereq
-
-        e = g.addEdge(source, target);
-        if (e.id === undefined) {
-            i--;
-            continue;
-        }
-    }
-})(g);
 
 $(function () {
     startLayout();
