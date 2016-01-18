@@ -79,7 +79,7 @@ var Edge = (function () {
 
     function Edge(source, target) {
         // return undefined if duplicate or (after a very naive check) circular
-        var tentativeID = this.genarateEdgeID(source, target);
+        var tentativeID = this.genID(source, target);
 
         // TODO : Implement edge-chasing algo to find circular dependencies
         if ((source === target) ||
@@ -93,6 +93,7 @@ var Edge = (function () {
             this.source = source;
             this.target = target;
             this.id = tentativeID;
+            this.type = "arrow";
             edgeCache.push(this.id);
             return this;
         }
@@ -111,13 +112,32 @@ MySigma = (function () {
     });
 
     function MySigma(settings, domManager) {
-        this.g = new Graph();
+        var _that = this;
         this.domManager = (typeof domManager !== 'undefined') ? domManager : {};
         this.drawerNode = null;
         this.s = new sigma(settings);
-        this.a = sigma.plugins.activeState(s);
+        this.a = sigma.plugins.activeState(this.s);
+        this.g = settings.graph;
         this.secondaryMode = false;
-        this.layoutStyle = layoutEnum.Fruchterman;
+        this.layoutStyle = layoutEnum.Dagre;
+        this.selectCallback = function (target) {
+            //console.log(that);
+            if (target.constructor === Array) {
+                target = target[0];
+            }
+            if (!_that.secondaryMode) {
+                if (target === undefined ||
+                    target.length === 0 && _that.drawerNode !== null) {
+                    domManager.leftSnapClose();
+                } else {
+                    _that.drawerNode = target;
+                    domManager.setDrawerContent(_that.s.graph.nodes(target));
+                    domManager.leftSnapOpen();
+                }
+            } else { // secondary mode == addition of new prereqs
+                domManager.handleTentativePrereq(target);
+            };
+        };
         //var secondaryActiveState = sigma.plugins.activeState(s);
 
 
@@ -126,10 +146,10 @@ MySigma = (function () {
         glyphRenderer.bind('render', function (e) {
             glyphRenderer.glyphs();
         });
-        var selectANode = sigma.plugins.select(this.s, activeState, glyphRenderer, selectCallback, {
+        var selectANode = sigma.plugins.select(this.s, this.a, glyphRenderer, this.selectCallback, {
             exclusive: true
         });
-        var frListener = sigma.layouts.fruchtermanReingold.configure(s, {
+        var frListener = sigma.layouts.fruchtermanReingold.configure(this.s, {
             iterations: 500,
             easing: 'quadraticInOut',
             duration: 800
@@ -160,23 +180,7 @@ MySigma = (function () {
             console.log("something went wrong with the layout switch");
         }
     }
-    MySigma.prototype.selectCallback = function (target) {
-        if (target.constructor === Array) {
-            target = target[0];
-        }
-        if (!this.secondaryMode) {
-            if (target === undefined ||
-                target.length === 0 && this.drawerNode !== null) {
-                domManager.leftSnapClose();
-            } else {
-                this.drawerNode = target;
-                domManager.setDrawerContent(this.s.graph.nodes(target));
-                domManager.leftSnapOpen();
-            }
-        } else { // secondary mode == addition of new prereqs
-            domManager.handleTentativePrereq(target);
-        };
-    };
+
     MySigma.prototype.getActives = function () {
         var actives = [];
         if (this.secondaryMode) {
@@ -194,13 +198,14 @@ MySigma = (function () {
         return s.graph.nodes(id);
     };
     MySigma.prototype.createNode = function () {
+        console.log(this);
         var n = this.g.addNode();
         this.s.graph.addNode(n);
         this.a.dropNodes();
         this.a.addNodes(n.id);
-        selectCallback(n.id);
+        this.selectCallback(n.id);
         this.s.refresh();
-        startLayout();
+        this.startLayout();
     };
     MySigma.prototype.reset = function () {
         this.drawerNode = null;
@@ -211,18 +216,18 @@ MySigma = (function () {
         });
     };
     MySigma.prototype.getPrereqs = function (node) {
-        var prereqs = [];
-        this.s.graph.edges().forEach(function (v, i, a) {
+        var prereqs = [], s = this.s;
+        s.graph.edges().forEach(function (v, i, a) {
             if (v.target === node.id) {
                 prereqs.push(s.graph.nodes(v.source));
             }
         });
         return prereqs;
     };
-    MySigma.prototype.genEdgeID: function (source, target) {
+    MySigma.prototype.genEdgeID = function (source, target) {
         return [source, target].join();
     };
-    MySigma.prototype.removePrereqs = function (head, prereqs) {
+    MySigma.prototype.removeEdge = function (head, prereqs) {
         prereqs.forEach(function (v) {
             s.graph.dropEdges(genEdgeID(v, head));
         });
@@ -241,18 +246,18 @@ MySigma = (function () {
         });
     };
     MySigma.prototype.toggleLayout = function () {
-     switch (this.layoutStyle) {
-     case layoutEnum.Dagre:
-         layoutStyle = layoutEnum.Fruchterman;
-         break;
-     case layoutEnum.Fruchterman:
-         layoutStyle = layoutEnum.Dagre;
-         break;
-     default:
-         console.log("eye error");
-     }
-     startLayout();
- }
+        switch (this.layoutStyle) {
+        case layoutEnum.Dagre:
+            this.layoutStyle = layoutEnum.Fruchterman;
+            break;
+        case layoutEnum.Fruchterman:
+            this.layoutStyle = layoutEnum.Dagre;
+            break;
+        default:
+            console.log("eye error");
+        }
+        this.startLayout();
+    }
     MySigma.prototype.toggleSecondaryMode = function () {
         this.secondaryMode = !this.secondaryMode;
         return this.secondaryMode;
@@ -264,6 +269,8 @@ MySigma = (function () {
             skipIndexation: true
         });
     };
+
+    return MySigma;
 })();
 
 domManager = {
@@ -277,8 +284,8 @@ domManager = {
             $(this).text(node.name);
         }).fadeIn(200);
 
-        initDrawerContent();
-        setPrereqs(node);
+        this.initDrawerContent();
+        this.setPrereqs(node);
     },
     handleTentativePrereq: function (nodeID) {
         // Called from the selectCallback
@@ -312,13 +319,14 @@ domManager = {
 
     },
     setPrereqs: function (node) {
-        var prereqs = s.getPrereqs();
+        var prereqs = s.getPrereqs(node);
         var list = '';
+        var _that = this;
         $('#prereq-list li:not(#new-prereq)').remove();
 
         if (prereqs.length > 0) {
             prereqs.forEach(function (v) {
-                list += genPrereqLi(v);
+                list += _that.genPrereqLi(v);
             });
         } else {
             list = '<li><a class="none"> - none - </a></li>';
@@ -350,7 +358,7 @@ domManager = {
             $('#prereq-confirm').hide(400);
         }
     },
-    removePrereqs: function () {
+    confirmRemovePrereqs: function () {
         var selected = $('#prereq-list li.selected');
         $('#prereq-confirm').hide(400);
         selected.slideToggle({
@@ -365,31 +373,31 @@ domManager = {
         selected = selected.map(function () {
             $(this).data('id');
         });
-        s.removePrereqs(s.drawerNode, selected);
+        s.removeEdge(s.drawerNode, selected);
         s.startLayout();
     },
     leftSnapClose: function () {
-        arrowSpin();
+        this.arrowSpin();
         snapper.enable();
         setTimeout(function () {
             snapper.close('left');
             $('#toolbar').detach().appendTo($('#outside-container'));
         }, 300);
-        initDrawerContent();
+        this.initDrawerContent();
         this.s.reset();
     },
     leftSnapOpen: function () {
         if (snapper.state().state !== 'closed') {
-            arrowSpin();
+            this.arrowSpin();
             return;
         }
 
         $('#toolbar').detach().appendTo($('#outside-container'));
         snapper.open('left');
-        arrowSpin();
+        this.arrowSpin();
         snapper.disable();
     },
-    addPrereqs: function () {
+    confirmPrereqs: function () {
         var selected = $('#prereq-list li.tentative');
         // set the elements to display: none
         selected.find('a.remove').hide();
@@ -401,12 +409,12 @@ domManager = {
             // get rid of the custom styling up above, after transition
             $('#prereq-list li.deactivated').removeAttr('style');
             selected.removeClass('tentative').removeAttr('style');
-            toggleAddNewPrereqMode();
+            this.toggleAddNewPrereqMode();
             var newIDs = selected.map(function () {
                 return $(this).data('id');
             }).get();
-            s.addEdges(newIDs);
-            s.startLayout();
+            this.s.addEdges(newIDs);
+            this.s.startLayout();
         }, 500);
     },
     toggleAddNewPrereqMode: function () {
@@ -443,10 +451,10 @@ domManager = {
                 rotate: '1080deg'
             });
             i.addClass('spun');
-        },
+        }
     },
     toggleEditMode: function () {
-        editMode = !editMode;
+        this.editMode = !this.editMode;
         $('#container').toggleClass('edit-mode');
 
         $.when($('#prereq-list>li>a.remove').slideToggle(),
@@ -458,46 +466,16 @@ domManager = {
     }
 }
 
-var s = new MySigma({
-        renderer: {
-            container: document.getElementById('graph-container'),
-            type: 'canvas'
-        },
-        settings: {
-            secondaryActiveColor: 'rgba(40,251,40,.5)',
-            borderSize: 1,
-            outerBorderSize: 1,
-            defaultNodeBorderColor: 'rgba(255,215,0,.1)',
-            defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
-            edgeHoverExtremities: true,
-            enableHovering: true,
-            nodeHoverLevel: 2,
-            defaultNodeHoverColor: 'rgba(255,215,0,.05)',
-            nodeHoverColor: 'default',
-            minEdgeSize: 3,
-            maxEdgeSize: 3,
-            minArrowSize: 5,
-            minNodeSize: 20,
-            maxNodeSize: 20,
-            glyphScale: .99,
-            glyphFontScale: .6,
-            glyphLineWidth: 1,
-            glyphStrokeIfText: false,
-            glyphTextThreshold: 1,
-            glyphThreshold: 6
-        },
-    },
-    domManager);
 
-
-//  Populate dummy data 
-(function (g) {
+//  Initiate and populate dummy data 
+var s = (function () {
     var i,
         s,
         o,
         N = 30,
         E = 25,
-        d = 0.5;
+        d = 0.5,
+        g = new Graph();
 
     for (i = 0; i < N; i++) {
         var x = 100 * Math.cos(2 * i * Math.PI / N),
@@ -511,16 +489,49 @@ var s = new MySigma({
         // skip cases where node is its own prereq
 
         e = g.addEdge(source, target);
-        if (e.id === undefined) {
+        if (e == null) {
             i--;
             continue;
         }
     }
-})(s.g);
-domManager.init(s);
-s.s.refresh();
+    s = new MySigma({
+            renderer: {
+                container: document.getElementById('graph-container'),
+                type: 'canvas'
+            },
+            graph: g,
+            settings: {
+                secondaryActiveColor: 'rgba(40,251,40,.5)',
+                borderSize: 1,
+                outerBorderSize: 1,
+                defaultNodeBorderColor: 'rgba(255,215,0,.1)',
+                defaultNodeOuterBorderColor: 'rgba(255, 215, 0, .3)',
+                edgeHoverExtremities: true,
+                enableHovering: true,
+                nodeHoverLevel: 2,
+                defaultNodeHoverColor: 'rgba(255,215,0,.05)',
+                nodeHoverColor: 'default',
+                minEdgeSize: 3,
+                maxEdgeSize: 3,
+                minArrowSize: 5,
+                minNodeSize: 20,
+                maxNodeSize: 20,
+                glyphScale: .99,
+                glyphFontScale: .6,
+                glyphLineWidth: 1,
+                glyphStrokeIfText: false,
+                glyphTextThreshold: 1,
+                glyphThreshold: 6
+            },
+        },
+        domManager);
+    domManager.init(s);
+    //s.s.refresh();
+    return s;
+})();
 
- /*
+
+/*
  ** All static event bindings
  **
  */
@@ -529,17 +540,17 @@ s.s.refresh();
     $('#prereq-list').on('click', 'li > a.remove > i', domManager.clickRemovePrereq);
 
     $('#close-left i').on('click', function () {
-         domManager.leftSnapClose();
+        domManager.leftSnapClose();
     });
 
     $('#close-right i').on('click', function () {
-         domManager.rightSnapClose();
+        domManager.rightSnapClose();
     });
 
 
     $('#wrench').on('click', function () {
         $(this).toggleClass('active');
-         domManager.toggleEditMode();
+        domManager.toggleEditMode();
     });
 
 
@@ -548,7 +559,7 @@ s.s.refresh();
     });
 
     $('#plus').on('click', function () {
-        createNode();
+        s.createNode();
     });
 
     $('#prereqs').on('click', function () {
@@ -559,19 +570,19 @@ s.s.refresh();
     });
 
     $('#new-prereq').on('click', function () {
-        toggleAddNewPrereqMode();
+        domManager.toggleAddNewPrereqMode();
     });
 
     $('#prereq-confirm').on('click', function () {
         if (s.secondaryMode) {
-            addPrereqs();
+            domManager.confirmAddPrereqs();
         } else {
-            removePrereqs();
+            domManager.confirmRemovePrereqs();
         }
     })
 })();
 
 
 $(function () {
-    startLayout();
+    s.startLayout();
 });
