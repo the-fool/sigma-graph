@@ -228,9 +228,12 @@ MySigma = (function () {
         return [source, target].join();
     };
     MySigma.prototype.removeEdge = function (head, prereqs) {
+        //var _that = this;
         prereqs.forEach(function (v) {
-            s.graph.dropEdges(genEdgeID(v, head));
-        });
+            var id = this.genEdgeID(v,head);
+            console.log(id);
+            this.s.graph.dropEdges(id);
+        }, this);
     };
     MySigma.prototype.addEdges = function (sources, target) {
         // safety check --
@@ -360,6 +363,9 @@ domManager = {
     },
     confirmRemovePrereqs: function () {
         var selected = $('#prereq-list li.selected');
+        var nodeIDs = selected.map(function () {
+            return $(this).data('id');
+        }).get();
         $('#prereq-confirm').hide(400);
         selected.slideToggle({
             always: function () {
@@ -370,10 +376,9 @@ domManager = {
                 $(this).remove();
             }
         });
-        selected = selected.map(function () {
-            $(this).data('id');
-        });
-        s.removeEdge(s.drawerNode, selected);
+        
+        console.log(nodeIDs);
+        s.removeEdge(this.s.drawerNode, nodeIDs);
         s.startLayout();
     },
     leftSnapClose: function () {
@@ -427,7 +432,6 @@ domManager = {
                 $('#prereq-list > li.tentative').slideUp(),
                 $('#prereq-confirm').hide(400))
             .then(function () {
-                console.log('hey');
                 var $lis = $('#new-prereq').toggleClass('in-situ').siblings().not('.tentative');
                 $('#prereq-list > li.tentative').remove();
                 if (s.secondaryMode) {
